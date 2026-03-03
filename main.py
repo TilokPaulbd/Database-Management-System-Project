@@ -1,7 +1,10 @@
 import mysql.connector
-from flask import Flask          # aita case sensitive, protom Flask f then F for senond flask.
+from flask import Flask ,render_template         # aita case sensitive, protom Flask f then F for senond flask. 
+                                                 #render_template aita html file ke render korar jonno use kora hoy.
+                                                 
 
-app = Flask(__name__)            # flak object . flask bujthe pare ata main program.
+app = Flask(__name__,template_folder='tamplates')            # flak object . flask bujthe pare ata main program.
+                                                            # tamplates folder na bole dile error dey . tample foulder pay na.
 
 Database = mysql.connector.connect(
     host="sql12.freesqldatabase.com",
@@ -27,13 +30,17 @@ for row in result:
 
 @app.route('/')                                ##browser a kau /(homepage) a gale kaun function cholbe seta bole dey.
 def home():
-    return "Welcome to the Home Page"
+    return render_template('home_page.html')             
 
 
 
 @app.route('/Login')                       # same ager motho /Login a gale bole dey .
 def login():
-    return "Welcome to the Login Page"
+    return render_template('student_login_page.html')         
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)       #debug true dile code a kono change korle server auto restart hoye jabe.
