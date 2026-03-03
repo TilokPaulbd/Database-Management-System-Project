@@ -4,7 +4,7 @@ from flask import Flask ,render_template         # aita case sensitive, protom F
                                                  
 
 app = Flask(__name__,template_folder='tamplates')            # flak object . flask bujthe pare ata main program.
-                                                            # tamplates folder na bole dile error dey . tample foulder pay na.
+                                                            # tamplates folder na bole dile error dey . tample folder pay na.
 
 Database = mysql.connector.connect(
     host="sql12.freesqldatabase.com",
@@ -34,7 +34,7 @@ def home():
 
 
 
-@app.route('/Login')                       # same ager motho /Login a gale bole dey .
+@app.route('/Login')                       # same ager motho /Login a jabe bole dey .
 def login():
     return render_template('student_login_page.html')         
 
