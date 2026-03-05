@@ -7,10 +7,21 @@
 </head>
 <body>
     <h1>welcome to login page.</h1>
+
+
     
-    <form>
+    <form action="/Login" method="POST">          <!-- form dea data pathano hoy. action dea kothay pathabo bole dey . method dea ki method use korbo bole dey.-->
         <lebel for >Student ID : </lebel>            <!-- level dea text box er age lekha hoy.-->
-        <input type="text">                          <!--input dea box and type dea ki type er box oita shoe kore.-->
+        <input type="text" placeholder="xxx-xx-xxx" name="student_id" required>                          <!--input dea box and type dea ki type er box oita shoe kore.-->
+        <br>
+        <br>
+        <lebel for >Password : </lebel>            <!-- level dea text box er age lekha hoy.-->
+        <input type="password" placeholder="*********" name="student_password" required>
+        
+        
+        <br><br>
+        <pre>               </pre><input type="submit" value="Login">
+
     </form>
 
 </body>
