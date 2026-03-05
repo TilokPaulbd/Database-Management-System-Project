@@ -60,7 +60,8 @@ def login():
         
         #akhon compare korbo
         if result:                                  # jodi result thake tahole mane data match koreche.
-            return "Login successful!" +  result[0]    # login successful message deya hoy.
+            # seat booking page a niye jabo 
+            return render_template('student_Seat_Booking_page.html', student_name=result[0])  # seat booking page a niye jabo and student name o pathabo.
         else:
             return "Invalid student ID or password."  # jodi data match na kore tahole invalid message deya hoy.
         
@@ -93,6 +94,23 @@ def register():
 
 
 
+
+
+
+
+
+
+@app.route('/BookSeat', methods=['GET', 'POST'])
+def book_seat():
+    if request.method == 'POST':
+        student_name = request.form['student_name']
+        buss_seat = request.form['buss_seat']
+
+        
+        return "Seat booked successfully!" + f" Student Name: {student_name}, Seat Number: {buss_seat}" #f-string হলো Python string, যার মধ্যে {} ব্যবহার করে variable বা expression সরাসরি embed করা যায়। 
+    
+    return render_template('student_Seat_Booking_page.html')
+        
 
 
 
