@@ -54,13 +54,14 @@ def login():
         student_password = request.form['student_password']         
      
         #data check korbo database er table er sathe
-        cursor.execute("SELECT student_name FROM Students_info WHERE student_id = %s AND student_password = %s", (student_id, student_password))  # SQL query chalanur jonno cursor object use
+        cursor.execute("SELECT student_name,student_id FROM Students_info WHERE student_id = %s AND student_password = %s", (student_id, student_password))  # SQL query chalanur jonno cursor object use
         result = cursor.fetchone()                   # fetchone() method use kore query er prothom result ta neya hoy.
         print(result)
         
         #akhon compare korbo
         if result:                                  # jodi result thake tahole mane data match koreche.
-            return "Login successful!" +  result[0]    # login successful message deya hoy.
+            # seat booking page a niye jabo 
+            return render_template('student_Seat_Booking_page.html', student_name=result[0], student_id=result[1])  # seat booking page a niye jabo and student name o pathabo.
         else:
             return "Invalid student ID or password."  # jodi data match na kore tahole invalid message deya hoy.
         
@@ -96,6 +97,47 @@ def register():
 
 
 
+
+
+
+@app.route('/BookSeat', methods=['GET', 'POST'])
+def book_seat():
+    if request.method == 'POST':
+        student_name = request.form['student_name']
+        student_id = request.form['student_id']
+        buss_seat = request.form['buss_seat']
+        
+        #akhon  Bookseats table a data insert korbo
+        buss_id=1
+        student_id=student_id
+        cursor.execute("INSERT INTO Bookseats (buss_seat,buss_id ,student_id) VALUES (%s, %s, %s)", (buss_seat, buss_id, student_id))
+        Database.commit()
+
+        return "Seat booked successfully!" + f" Student Name: {student_name}, Student ID: {student_id}, Seat Number: {buss_seat}" #f-string হলো Python string, যার মধ্যে {} ব্যবহার করে variable বা expression সরাসরি embed করা যায়। 
+    
+    return render_template('student_Seat_Booking_page.html')
+        
+
+
+
+
+
+
+@app.route('/Admin',methods=['GET', 'POST'])
+def admin():
+    if request.method == 'POST':
+        admin_id = request.form['admin_id']
+        admin_password = request.form['admin_password']
+        
+        cursor.execute("SELECT * FROM Admin_info WHERE admin_id = %s AND admin_password = %s", (admin_id, admin_password))
+        result = cursor.fetchone()
+        
+        if result:
+            return "Welcome, Admin"
+        else:
+            return "Invalid admin ID or password."
+    
+    return render_template('admin_login_page.html')
 
 
 
