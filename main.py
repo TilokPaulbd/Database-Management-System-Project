@@ -8,9 +8,9 @@ app = Flask(__name__,template_folder='tamplates')            # flak object . fla
 
 Database = mysql.connector.connect(
     host="sql12.freesqldatabase.com",
-    user="sql12818572",
-    password="22KvcK1UbY",          #Database collected from freesqldatabase.com (Size 5 MB)
-    database="sql12818572",   
+    user="sql12820369",
+    password="nNeUhkAFRv",          #Database collected from freesqldatabase.com (Size 5 MB)
+    database="sql12820369",   
     port=3306
 )
 
