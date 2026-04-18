@@ -43,29 +43,80 @@ def home():
 
 
 
-
-
-@app.route('/Login',methods=['GET', 'POST'])                       # same ager motho /Login a jabe bole dey .
+@app.route('/Login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':                      # jodi form a data pathano hoy tahole post method use hobe.
-        
-        # data collect korchi user thake
-        student_id = request.form['student_id']      # form a student_id name dea input theke data neya hoy.
-        student_password = request.form['student_password']         
-     
-        #data check korbo database er table er sathe
-        cursor.execute("SELECT student_name,student_id FROM Students_info WHERE student_id = %s AND student_password = %s", (student_id, student_password))  # SQL query chalanur jonno cursor object use
-        result = cursor.fetchone()                   # fetchone() method use kore query er prothom result ta neya hoy.
-        print(result)
-        
-        #akhon compare korbo
-        if result:                                  # jodi result thake tahole mane data match koreche.
-            # seat booking page a niye jabo 
-            return render_template('student_Seat_Booking_page.html', student_name=result[0], student_id=result[1])  # seat booking page a niye jabo and student name o pathabo.
+    if request.method == 'POST':
+
+        student_id = request.form['student_id']
+        student_password = request.form['student_password']
+
+        cursor.execute("CALL student_login(%s, %s)", (student_id, student_password))
+        data = cursor.fetchone()
+
+        if data:
+            return render_template(
+                'student_Seat_Booking_page.html',
+                student_name=data[0],
+                student_id=data[1]
+            )
         else:
-            return "Invalid student ID or password."  # jodi data match na kore tahole invalid message deya hoy.
-        
-    return render_template('student_login_page.html')         
+            return "Invalid student ID or password."
+
+    return render_template('student_login_page.html') 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -144,7 +195,7 @@ def admin():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)       #debug true dile code a kono change korle server auto restart hoye jabe.
+    app.run(debug=True, port=8000)     
 
 cursor.close()  
 Database.close()                            
