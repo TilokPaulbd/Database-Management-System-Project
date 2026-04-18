@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Seat Booking</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>Booking Date: {{ date }}</h2>
+        <h3>Bus ID: {{ bus_id }}</h3>
+
+        <h3>
+            Student ID: <span id="studentDisplay">{{ student_id }}</span>
+        </h3>
+
+        <h4>Bus Schedule ID: {{ bus_schedule_id }}</h4>
+
+        <hr>
+
+        <h3>Select Seat (1–40)</h3>
+        <div id="seatGrid"></div>
+
+        <form method="POST" action="/add_booking" onsubmit="return validateForm()">
+
+            <input type="hidden" name="student_id" value="{{ student_id }}">
+            <input type="hidden" name="bus_schedule_id" value="{{ bus_schedule_id }}">
+            <input type="hidden" id="seatInput" name="seat_id">
+
+            <br><br>
+            <button type="submit">Confirm Booking</button>
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+let student_id = "{{ student_id }}";
+let bus_id = "{{ bus_id }}";
+
+console.log("Student ID:", student_id);
+console.log("Bus ID:", bus_id);
+
+fetch(`/get_available_seats?bus_id=${bus_id}`)
+.then(res => res.json())
+.then(data => {
+
+    let available = new Set(data.map(s => s.seat_number));
+
+    let html = "";
+
+    for (let i = 1; i <= 40; i++) {
+
+        if (available.has(i)) {
+            html += `<div class="seat" onclick="selectSeat(${i}, this)">
+                        ${i}
+                     </div>`;
+        } else {
+            html += `<div class="seat">
+                        ${i}
+                     </div>`;
+        }
+    }
+
+    document.getElementById("seatGrid").innerHTML = html;
+});
+
+function selectSeat(seat_id, el) {
+
+    document.querySelectorAll(".seat").forEach(s => {
+        s.classList.remove("selected");
+    });
+
+    el.classList.add("selected");
+
+    document.getElementById("seatInput").value = seat_id;
+
+    console.log("student_id:", student_id);
+    console.log("bus_schedule_id:", "{{ bus_schedule_id }}");
+    console.log("seat_id:", seat_id);
+}
+
+function validateForm() {
+
+    let seat = document.getElementById("seatInput").value;
+
+    if (!seat) {
+        alert("Please select a seat first!");
+        return false;
+    }
+
+    return true;
+}
+
+</script>
+
+</body>
+</html>

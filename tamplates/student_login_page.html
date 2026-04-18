@@ -1,27 +1,28 @@
-<!DOCTYPE html>                               
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
 </head>
+
 <body>
-    <h1>welcome to login page.</h1>
 
+<div class="container">
+    <h2>Login Page</h2>
 
-    
-    <form action="/Login" method="POST">          <!-- form dea data pathano hoy. action dea kothay pathabo bole dey . method dea ki method use korbo bole dey.-->
-        <lebel for >Student ID : </lebel>            <!-- level dea text box er age lekha hoy.-->
-        <input type="text" placeholder="xxx-xx-xxx" name="student_id" required>                          <!--input dea box and type dea ki type er box oita shoe kore.-->
-        <br><br>
-        <lebel for >Password : </lebel>            <!-- level dea text box er age lekha hoy.-->
-        <input type="password" placeholder="*********" name="student_password" required>
-        
-        
-        <br><br>
-        <pre>               </pre><input type="submit" value="Login">
+    <form action="/login" method="POST">
+
+        <label>Student ID</label><br>
+        <input type="text" name="student_id" placeholder="xxx-xx-xxx" required>
+
+        <label>Password</label><br>
+        <input type="password" name="student_password" placeholder="********" required>
+
+        <button type="submit">Login</button>
 
     </form>
+</div>
 
 </body>
 </html>

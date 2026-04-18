@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Dashboard</title>
+</head>
+
+<body>
+
+
+<div class="navbar">
+    <h2>Student Dashboard</h2>
+    <a href="/logout" class="logout">Logout</a>
+</div>
+
+
+<div class="container">
+    <div class="card">
+        <h3>Student Info</h3>
+
+        <div class="info"><b>ID:</b> {{ student_id }}</div>
+        <div class="info"><b>Name:</b> {{ student_name }}</div>
+        <div class="info"><b>Email:</b> {{ email }}</div>
+        <div class="info"><b>Phone:</b> {{ phone }}</div>
+
+        <a href="/booking_page?student_id={{ student_id }}">
+            <button type="button">Book Seat</button>
+        </a>
+
+        <p><b>Denied Count:</b> {{ denied_count }}</p>
+    </div>
+</div>
+
+
+{% if denied_count > 10 %}
+<div class="warning">
+    <h3>⚠ WARNING</h3>
+    <p>
+        Your denied travel count is <b>{{ denied_count }}</b>.<br>
+        This is above the safe limit. Please follow system rules or contact admin.
+    </p>
+</div>
+{% endif %}
+
+
+<div class="table-card">
+    <h3>Travel History</h3>
+
+    <table>
+        <tr>
+            <th>Log ID</th>
+            <th>Booking ID</th>
+            <th>Schedule</th>
+            <th>Seat</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Status</th>
+            <th>Time</th>
+        </tr>
+
+        {% for l in logs %}
+        <tr>
+            <td>{{ l[0] }}</td>
+            <td>{{ l[1] }}</td>
+            <td>{{ l[3] }}</td>
+            <td>{{ l[4] }}</td>
+            <td>{{ l[5] }}</td>
+            <td>{{ l[6] }}</td>
+            <td>{{ l[7] }}</td>
+            <td>{{ l[8] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+<div class="table-card">
+    <h3>Payment History</h3>
+
+    <form method="GET" action="/student_dashboard">
+        <input type="hidden" name="student_id" value="{{ student_id }}">
+
+        <label>Semester ID:</label>
+        <input type="number" name="semester_id" value="{{ semester_id }}" min="1">
+
+        <button type="submit">Search Payment</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>Payment ID</th>
+            <th>Student ID</th>
+            <th>Semester ID</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+
+        {% for p in payments %}
+        <tr>
+            <td>{{ p[0] }}</td>
+            <td>{{ p[1] }}</td>
+            <td>{{ p[2] }}</td>
+            <td>{{ p[3] }}</td>
+            <td>{{ p[4] }}</td>
+            <td>{{ p[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>
