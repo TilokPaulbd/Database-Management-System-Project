@@ -1,0 +1,1124 @@
+
+CREATE TABLE Admins (
+ admin_id VARCHAR(30) PRIMARY KEY,
+ admin_name VARCHAR(30),
+ designation VARCHAR(30),
+ password VARCHAR(30)
+);
+
+
+
+
+
+
+CREATE TABLE Students (
+    student_id VARCHAR(30) PRIMARY KEY,
+    student_name VARCHAR(30),
+    email VARCHAR(30),
+    phone INT,
+    password VARCHAR(30)
+);
+
+
+
+
+
+
+
+
+
+CREATE TABLE Semesters (
+    semester_id INT PRIMARY KEY,
+    semester_name VARCHAR(30)
+);
+
+
+
+
+
+
+CREATE TABLE Routes (
+    route_id INT PRIMARY KEY,
+    start_destination VARCHAR(30),
+    end_destination VARCHAR(30)
+);
+
+
+
+
+
+
+CREATE TABLE Buses (
+    bus_id INT PRIMARY KEY,
+    bus_name VARCHAR(30)
+);
+
+
+
+
+
+
+CREATE TABLE Seats (
+    seat_id INT AUTO_INCREMENT PRIMARY KEY,
+    bus_id INT,
+    seat_number INT,
+    FOREIGN KEY (bus_id) REFERENCES Buses(bus_id)
+);
+
+
+
+
+
+
+
+
+CREATE TABLE Schedules (
+    schedule_id INT PRIMARY KEY,
+    route_id INT,
+    journey_date DATE,
+    start_time TIME,
+    end_time TIME,
+    FOREIGN KEY (route_id) REFERENCES Routes(route_id)
+);
+
+
+
+
+
+
+
+
+
+CREATE TABLE Bus_schedules ( 
+    bus_schedule_id INT PRIMARY KEY, 
+    bus_id INT, 
+    schedule_id INT, 
+    FOREIGN KEY (bus_id) REFERENCES Buses(bus_id), 
+    FOREIGN KEY (schedule_id) REFERENCES Schedules(schedule_id) 
+);
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE Bookings (
+    booking_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id VARCHAR(30),
+    seat_id INT,
+    schedule_id INT,
+    booking_time DATETIME,
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (seat_id) REFERENCES Seats(seat_id),
+    FOREIGN KEY (schedule_id) REFERENCES Schedules(schedule_id)
+);
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE Travel_status (
+ travel_status_id INT AUTO_INCREMENT PRIMARY KEY,
+ booking_id INT,
+ travel_status VARCHAR(30) DEFAULT 'CONFIRMED',
+ update_time DATETIME,
+ FOREIGN KEY (booking_id) REFERENCES Bookings(booking_id)
+);
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE Semesters (
+    semester_id INT PRIMARY KEY ,
+    semester_name VARCHAR(50)
+);
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE Payments (
+    payment_id INT PRIMARY KEY,
+    student_id VARCHAR(30),
+    semester_id INT,
+    payment_status VARCHAR(30),
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (semester_id) REFERENCES Semesters(semester_id)
+);
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE Travel_log (
+ travel_log_id INT AUTO_INCREMENT PRIMARY KEY,
+ booking_id INT,
+ student_id VARCHAR(30),
+ bus_schedule_id INT,
+ seat_id INT,
+ start_destination VARCHAR(30),
+ end_destination VARCHAR(30),
+ travel_status VARCHAR(30),
+ log_time DATETIME
+);
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE get_student_travel_logs(IN p_student_id VARCHAR(30))
+BEGIN
+
+
+ SELECT 
+ travel_log_id,
+ booking_id,
+ student_id,
+ bus_schedule_id,
+ seat_id,
+ start_destination,
+ end_destination,
+ travel_status,
+ log_time,
+
+ FROM Travel_log
+ WHERE student_id = p_student_id
+ ORDER BY log_time DESC;
+
+ 
+
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+                  
+                               procedure student_signup
+
+DELIMITER $$
+CREATE PROCEDURE student_signup(
+ IN s_id VARCHAR(30),
+ IN s_name VARCHAR(30),
+ IN s_email VARCHAR(30),
+ IN s_phone INT,
+ IN s_password VARCHAR(30)
+)
+
+BEGIN
+
+ INSERT INTO Students(student_id, student_name, email, phone, password)
+ VALUES (s_id, s_name, s_email, s_phone, s_password);
+
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+                 procedure student_login
+DELIMITER $$
+
+CREATE PROCEDURE student_login(
+    IN s_id VARCHAR(30),
+    IN s_password VARCHAR(30)
+)
+BEGIN
+    SELECT student_id
+    FROM Students
+    WHERE student_id = s_id AND password = s_password;
+END $$
+
+DELIMITER ;
+
+ procedure add_admin
+CREATE PROCEDURE add_admin(
+ IN a_id VARCHAR(30),
+ IN a_name VARCHAR(30),
+ IN a_designation VARCHAR(30),
+ IN a_password VARCHAR(30)
+)
+BEGIN
+ INSERT INTO Admins(admin_id, admin_name, designation, password)
+ VALUES (a_id, a_name, a_designation, a_password);
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                             procedure admin_login
+
+DELIMITER $$
+
+CREATE PROCEDURE admin_login(
+ IN a_id VARCHAR(30),
+ IN a_password VARCHAR(30)
+)
+BEGIN
+ SELECT admin_id
+ FROM Admins
+ WHERE admin_id = a_id AND password = a_password;
+END $$
+
+DELIMITER ;
+  
+    procedure add_route
+
+DELIMITER $$
+
+CREATE PROCEDURE add_route(
+ IN r_id INT ,
+ IN r_start VARCHAR(30),
+ IN r_end VARCHAR(30)
+)
+BEGIN
+ INSERT INTO Routes(route_id, start_destination, end_destination)
+ VALUES (r_id, r_start, r_end);
+END $$
+
+DELIMITER ;
+
+procedure add_bus 
+DELIMITER $$
+
+CREATE PROCEDURE add_bus(
+ IN b_id INT,
+ IN b_name VARCHAR(30)
+)
+BEGIN
+ INSERT INTO Buses(bus_id, bus_name)
+ VALUES (b_id, b_name);
+END $$
+
+DELIMITER ;
+ 
+
+
+
+
+
+
+
+
+
+
+                                      procedure create_seats
+
+DELIMITER $$
+
+CREATE PROCEDURE create_seats(IN b_id INT)
+BEGIN
+    DECLARE i INT DEFAULT 1;
+
+    WHILE i <= 40 DO
+        INSERT INTO Seats(bus_id, seat_number)
+        VALUES (b_id, i);
+        SET i = i + 1;
+    END WHILE;
+
+END $$
+
+DELIMITER ;
+
+                                     trigger assign_bus_seats
+DELIMITER $$
+
+CREATE TRIGGER assign_bus_seats
+AFTER INSERT ON Buses
+FOR EACH ROW
+BEGIN
+    CALL create_seats(NEW.bus_id);
+END $$
+
+DELIMITER ;
+
+alternative procedure add_bus_with_seats
+
+DELIMITER $$
+
+CREATE PROCEDURE add_bus_with_seats(
+ IN b_id INT,
+ IN b_name VARCHAR(30)
+)
+BEGIN
+ DECLARE i INT DEFAULT 1;
+
+
+ INSERT INTO Buses(bus_id, bus_name)
+ VALUES (b_id, b_name);
+
+
+ WHILE i <= 40 DO
+ INSERT INTO Seats(bus_id, seat_number)
+ VALUES (b_id, i);
+ SET i = i + 1;
+ END WHILE;
+
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+                                 procedure add_schedule
+DELIMITER $$
+
+CREATE PROCEDURE add_schedule(
+    IN s_id INT,
+    IN r_id INT,
+    IN j_date DATE,
+    IN s_time TIME,
+    IN e_time TIME
+)
+BEGIN
+    INSERT INTO Schedules(schedule_id, route_id, journey_date, start_time, end_time)
+    VALUES (s_id, r_id, j_date, s_time, e_time);
+END $$
+
+DELIMITER ;
+ procedure assign_bus_schedule
+DELIMITER $$
+
+CREATE PROCEDURE assign_bus_schedule(
+    IN bs_id INT,
+    IN b_id INT,
+    IN s_id INT
+)
+BEGIN
+    INSERT INTO Bus_schedules(buss_schedule_id, bus_id, schedule_id)
+    VALUES (bs_id, b_id, s_id);
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+                           addding some data 
+
+CALL add_admin('241-15-690', 'Tilok Paul', 'Manager', '123');
+CALL student_signup('241-15-690', 'Tilok', 'tilok241-15-690@diu.edu.bd', 01616517003, '123');
+CALL student_signup('241-15-039', 'Abdullah Al Sadid', 'sadid241-15-039@diu.edu.bd', 01822544532, 'abc');
+CALL add_route(1, 'DIU', 'Mirpur');
+CALL add_route(2, 'UIU', 'Uttara');
+CALL  add_bus_with_seats(1, 'Surjomukhi1');
+CALL  add_bus_with_seats(2, 'Surjomukhi2');
+CALL add_schedule(1, 1, '2026-04-20', '08:00:00', '12:00:00');
+CALL add_schedule(2, 2, '2026-04-21', '09:00:00', '01:00:00');
+CALL assign_bus_schedule(1, 1, 1);
+CALL assign_bus_schedule(2, 2, 2);
+
+
+
+
+
+
+                                         journey View
+
+CREATE OR REPLACE VIEW journey_view AS
+SELECT 
+ Schedules.schedule_id,
+ Schedules.route_id, 
+ Bus_schedules.bus_schedule_id, 
+ Schedules.journey_date,
+ Routes.start_destination,
+ Routes.end_destination,
+ Schedules.start_time,
+ Schedules.end_time,
+ Buses.bus_id,
+ Buses.bus_name
+FROM Schedules
+JOIN Routes 
+ ON Schedules.route_id = Routes.route_id
+JOIN Bus_schedules 
+ ON Schedules.schedule_id = Bus_schedules.schedule_id
+JOIN Buses 
+ ON Bus_schedules.bus_id = Buses.bus_id;
+
+
+
+
+
+
+
+
+
+
+
+
+                              procedure journey_schedule_by_date
+
+DELIMITER $$
+
+CREATE PROCEDURE journey_schedule_by_date(IN j_date DATE)
+BEGIN
+    SELECT *
+    FROM journey_view
+    WHERE journey_date = j_date;
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+                                        view available seat
+
+CREATE VIEW available_seats AS
+SELECT 
+    Seats.seat_id,
+    Seats.seat_number,
+    Seats.bus_id
+FROM Seats
+LEFT JOIN Bookings 
+    ON Seats.seat_id = Bookings.seat_id
+WHERE Bookings.seat_id IS NULL;
+
+ procedure show_available_seats
+DELIMITER $$
+
+CREATE PROCEDURE show_available_seats(IN p_bus_id INT)
+BEGIN
+ SELECT *
+ FROM available_seats
+ WHERE bus_id = p_bus_id;
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+                                  procedure add_booking
+
+DELIMITER $$
+
+CREATE PROCEDURE add_booking(
+    IN input_student_id VARCHAR(30),
+    IN input_bus_schedule_id INT,
+    IN input_seat_id INT
+)
+BEGIN
+    DECLARE selected_schedule_id INT;
+
+    SELECT schedule_id
+    INTO selected_schedule_id
+    FROM Bus_schedules
+    WHERE bus_schedule_id = input_bus_schedule_id;
+
+    IF EXISTS (
+        SELECT *
+        FROM available_seats
+        WHERE seat_id = input_seat_id
+    ) THEN
+
+        INSERT INTO Bookings(
+            student_id,
+            seat_id,
+            schedule_id,
+            booking_time
+        )
+        VALUES (
+            input_student_id,
+            input_seat_id,
+            selected_schedule_id,
+            NOW()
+        );
+
+    END IF;
+
+END $$
+
+
+
+
+
+
+
+                                              DELIMITER ;
+View show_all_booking
+CREATE VIEW show_all_booking AS
+SELECT 
+ Bookings.booking_id,
+ Bookings.student_id,
+ Students.student_name,
+ Students.email,
+ 
+ Bookings.seat_id,
+ Seats.seat_number,
+ 
+ Bus_schedules.bus_schedule_id,
+ 
+ Schedules.schedule_id,
+ Schedules.journey_date,
+ Schedules.start_time,
+ Schedules.end_time,
+ 
+ Routes.start_destination,
+ Routes.end_destination,
+ 
+ Buses.bus_id,
+ Buses.bus_name,
+ 
+ Bookings.booking_time
+
+FROM Bookings
+JOIN Students 
+ ON Bookings.student_id = Students.student_id
+
+JOIN Seats 
+ ON Bookings.seat_id = Seats.seat_id
+
+JOIN Schedules 
+ ON Bookings.schedule_id = Schedules.schedule_id
+
+JOIN Bus_schedules 
+ ON Schedules.schedule_id = Bus_schedules.schedule_id
+
+JOIN Buses 
+ ON Bus_schedules.bus_id = Buses.bus_id
+
+JOIN Routes 
+ ON Schedules.route_id = Routes.route_id;
+
+
+
+
+
+
+
+
+
+
+
+                                   procedure view_booking_by_bus_schedule
+
+DELIMITER $$
+
+CREATE PROCEDURE view_booking_by_bus_schedule(
+    IN input_bus_schedule_id INT
+)
+BEGIN
+    SELECT *
+    FROM show_all_booking
+    WHERE bus_schedule_id = input_bus_schedule_id;
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+                                                    procedure 
+
+DELIMITER $$
+
+ procedure add_travel_status
+DELIMITER $$
+
+CREATE PROCEDURE add_travel_status(
+    IN input_booking_id INT
+)
+BEGIN
+    INSERT INTO Travel_status(
+        booking_id,
+        update_time
+    )
+    VALUES (
+        input_booking_id,
+        NOW()
+    );
+END $$
+
+DELIMITER ;
+
+
+
+                                        PROCEDURE add_travel_status_with_log
+
+                                        
+DELIMITER $$
+
+CREATE PROCEDURE add_travel_status_with_log(
+    IN input_booking_id INT,
+    IN input_status VARCHAR(30)
+)
+BEGIN
+    DECLARE booking_student_id VARCHAR(30);
+    DECLARE booking_schedule_id INT;
+    DECLARE booking_seat_id INT;
+    DECLARE bus_schedule_identifier INT;
+    DECLARE route_start_destination VARCHAR(30);
+    DECLARE route_end_destination VARCHAR(30);
+
+   
+    SELECT student_id, schedule_id, seat_id
+    INTO booking_student_id, booking_schedule_id, booking_seat_id
+    FROM Bookings
+    WHERE booking_id = input_booking_id;
+
+
+    SELECT bus_schedule_id
+    INTO bus_schedule_identifier
+    FROM Bus_schedules
+    WHERE schedule_id = booking_schedule_id
+    LIMIT 1;
+
+ 
+    SELECT Routes.start_destination, Routes.end_destination
+    INTO route_start_destination, route_end_destination
+    FROM Schedules
+    JOIN Routes 
+        ON Schedules.route_id = Routes.route_id
+    WHERE Schedules.schedule_id = booking_schedule_id;
+
+   
+    INSERT INTO Travel_status(
+        booking_id,
+        travel_status,
+        update_time
+    )
+    VALUES (
+        input_booking_id,
+        input_status,
+        NOW()
+    );
+
+
+    INSERT INTO Travel_log(
+        booking_id,
+        student_id,
+        bus_schedule_id,
+        seat_id,
+        start_destination,
+        end_destination,
+        travel_status,
+        log_time
+    )
+    VALUES (
+        input_booking_id,
+        booking_student_id,
+        bus_schedule_identifier,
+        booking_seat_id,
+        route_start_destination,
+        route_end_destination,
+        input_status,
+        NOW()
+    );
+
+END $$
+
+DELIMITER ;
+                                        PROCEDURE update_travel_status
+
+
+
+
+
+
+DELIMITER $$
+
+CREATE PROCEDURE update_travel_status(
+ IN input_booking_id INT,
+ IN input_status VARCHAR(30)
+)
+BEGIN
+
+ UPDATE Travel_status
+ SET travel_status = input_status,
+ update_time = NOW()
+ WHERE booking_id = input_booking_id;
+
+ UPDATE Travel_log
+ SET travel_status = input_status,
+ log_time = NOW()
+ WHERE booking_id = input_booking_id;
+
+ IF input_status = 'DENIED' THEN
+
+ DELETE FROM Travel_status
+ WHERE booking_id = input_booking_id;
+
+ DELETE FROM Bookings
+ WHERE booking_id = input_booking_id;
+
+ END IF;
+
+END $$
+
+DELIMITER ;
+
+
+
+
+                                 PROCEDURE add_semester
+
+
+DELIMITER $$
+
+CREATE PROCEDURE add_semester(
+ IN input_semester_id INT,
+ IN input_semester_name VARCHAR(50)
+)
+BEGIN
+ INSERT INTO Semesters(
+ semester_id,
+ semester_name
+ )
+ VALUES (
+ input_semester_id,
+ input_semester_name
+ );
+END $$
+
+DELIMITER ;
+
+
+
+
+                                         PROCEDURE add_payment
+
+
+DELIMITER $$
+
+CREATE PROCEDURE add_payment(
+ IN input_payment_id INT,
+ IN input_student_id VARCHAR(30),
+ IN input_semester_id INT,
+ IN input_payment_status VARCHAR(30)
+)
+BEGIN
+ INSERT INTO Payments (
+ payment_id,
+ student_id,
+ semester_id,
+ payment_status
+ )
+ VALUES (
+ input_payment_id,
+ input_student_id,
+ input_semester_id,
+ input_payment_status
+ );
+END $$
+
+DELIMITER ;
+ VIEW view_all_payments
+CREATE VIEW view_all_payments AS
+SELECT 
+ Payments.payment_id,
+ Payments.student_id,
+ Students.student_name,
+ Payments.semester_id,
+ Semesters.semester_name,
+ Payments.payment_status
+FROM Payments
+JOIN Students ON Payments.student_id = Students.student_id
+JOIN Semesters ON Payments.semester_id = Semesters.semester_id;
+
+
+
+
+
+
+
+
+
+
+
+                                   PROCEDURE search_payment
+
+
+
+DELIMITER $$
+
+CREATE PROCEDURE search_payment(
+ IN input_student_id VARCHAR(30),
+ IN input_semester_id INT
+)
+BEGIN
+ SELECT *
+ FROM view_all_payments
+ WHERE student_id = input_student_id
+ AND semester_id = input_semester_id;
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+                                     VIEW view_all_students
+
+
+
+CREATE VIEW view_all_students AS
+SELECT *
+FROM Students;
+PROCEDURE show_student_details_by_id
+DELIMITER $$
+
+CREATE PROCEDURE show_student_details_by_id(
+    IN input_student_id VARCHAR(30)
+)
+BEGIN
+    SELECT *
+    FROM view_all_students
+    WHERE student_id = input_student_id;
+END $$
+
+DELIMITER ;
+
+
+
+                                     VIEW routes_view
+
+
+CREATE VIEW routes_view AS
+SELECT 
+    route_id,
+    start_destination,
+    end_destination
+FROM Routes;
+VIEW buses_view
+CREATE  VIEW buses_view AS
+SELECT 
+    bus_id,
+    bus_name
+FROM Buses;
+VIEW schedules_view
+CREATE VIEW schedules_view AS
+SELECT 
+ Schedules.schedule_id,
+ Schedules.route_id,
+ Routes.start_destination,
+ Routes.end_destination,
+ Schedules.journey_date,
+ Schedules.start_time,
+ Schedules.end_time
+FROM Schedules
+JOIN Routes 
+ ON Schedules.route_id = Routes.route_id;
+
+
+
+
+
+
+
+
+
+                                        VIEW bus_schedules_view
+
+
+CREATE  VIEW bus_schedules_view AS
+SELECT 
+ Bus_schedules.bus_schedule_id,
+ Bus_schedules.bus_id,
+ Buses.bus_name,
+ Bus_schedules.schedule_id,
+ Schedules.journey_date,
+ Schedules.start_time,
+ Schedules.end_time
+FROM Bus_schedules
+JOIN Buses 
+ ON Bus_schedules.bus_id = Buses.bus_id
+JOIN Schedules 
+ ON Bus_schedules.schedule_id = Schedules.schedule_id;
+
+ PROCEDURE add_semester
+DELIMITER $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE add_semester(
+ IN input_semester_id INT,
+ IN input_semester_name VARCHAR(50)
+)
+BEGIN
+ INSERT INTO Semesters (semester_id, semester_name)
+ VALUES (input_semester_id, input_semester_name);
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+                                      VIEW semesters_view
+
+
+
+
+                                      
+CREATE  VIEW semesters_view AS
+SELECT
+ semester_id,
+ semester_name
+FROM Semesters;
+
+
+
+
+
+
+
+
+
+
+                                   PROCEDURE get_schedules_by_date
+
+
+
+
+
+DELIMITER $$
+
+CREATE PROCEDURE get_schedules_by_date(IN p_date DATE)
+BEGIN
+ SELECT 
+ bs.bus_schedule_id,
+ s.schedule_id,
+ r.start_destination,
+ r.end_destination,
+ s.start_time,
+ s.end_time,
+ bs.bus_id
+ FROM Bus_schedules bs
+ JOIN Schedules s ON bs.schedule_id = s.schedule_id
+ JOIN Routes r ON s.route_id = r.route_id
+ WHERE s.journey_date = p_date;
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DELIMITER $$
+
+CREATE PROCEDURE get_latest_booking_id(IN p_student_id VARCHAR(30))
+BEGIN
+
+ SELECT booking_id
+ FROM Bookings
+ WHERE student_id = p_student_id
+ ORDER BY booking_id DESC
+ LIMIT 1;
+
+END $$
+
+DELIMITER ;
