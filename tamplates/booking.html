@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Booking</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    
+    <div class="card">
+        <h3>Select Journey Date</h3>
+
+        <input type="date" id="date">
+        <button onclick="search()">Search</button>
+    </div>
+
+   
+    <div class="card">
+        <h3>Schedules</h3>
+
+        <table id="table">
+            <tr>
+                <th>Bus Schedule ID</th>
+                <th>Schedule ID</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Bus ID</th>
+                <th>Action</th>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<script>
+
+let student_id = "{{ student_id }}";
+
+function search() {
+
+    let date = document.getElementById("date").value;
+
+    if (!date) {
+        alert("Please select a date");
+        return;
+    }
+
+    fetch(`/get_schedules_by_date?date=${date}`)
+    .then(res => {
+        if (!res.ok) throw new Error("Server error");
+        return res.json();
+    })
+    .then(data => {
+
+        let table = document.getElementById("table");
+
+        table.innerHTML = `
+            <tr>
+                <th>Bus Schedule ID</th>
+                <th>Schedule ID</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Bus ID</th>
+                <th>Action</th>
+            </tr>
+        `;
+
+        if (!data || data.length === 0) {
+            table.innerHTML += `
+                <tr>
+                    <td colspan="8">No schedules found</td>
+                </tr>
+            `;
+            return;
+        }
+
+        data.forEach(s => {
+            table.innerHTML += `
+                <tr>
+                    <td>${s.bus_schedule_id}</td>
+                    <td>${s.schedule_id}</td>
+                    <td>${s.start_destination}</td>
+                    <td>${s.end_destination}</td>
+                    <td>${s.start_time}</td>
+                    <td>${s.end_time}</td>
+                    <td>${s.bus_id}</td>
+                    <td>
+                        <a href="/booking_seat?date=${date}&bus_schedule_id=${s.bus_schedule_id}&bus_id=${s.bus_id}&student_id=${student_id}">
+                            <button>Select</button>
+                        </a>
+                    </td>
+                </tr>
+            `;
+        });
+
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Failed to load schedules");
+    });
+}
+
+</script>
+
+</body>
+</html>

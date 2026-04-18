@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Missing Checking</title>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>Missing Checking System</h2>
+    <a href="/admin_dashboard">Back</a>
+</div>
+
+<div class="container">
+
+
+<form class="search-box" method="GET" action="/missing_checking.html">
+
+    <input type="number"
+           name="bus_schedule_id"
+           placeholder="Enter Bus Schedule ID"
+           value="{{ bus_schedule_id if bus_schedule_id != 0 else '' }}">
+
+    <button type="submit">Search</button>
+
+</form>
+
+<h3>View Booking By Bus Schedule</h3>
+
+
+<table>
+
+<tr>
+    <th>Schedule ID</th>
+    <th>Booking ID</th>
+    <th>Seat No</th>
+
+    <th>Student ID</th>
+    <th>Student Name</th>
+    <th>Email</th>
+
+    <th>Seat ID</th>
+    <th>Bus Schedule ID</th>
+
+    <th>Journey Date</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+
+    <th>Start Destination</th>
+    <th>End Destination</th>
+
+    <th>Bus ID</th>
+    <th>Bus Name</th>
+    <th>Booking Time</th>
+</tr>
+
+{% for b in bookings %}
+<tr>
+
+    <td>{{ b[7] }}</td>
+    <td>{{ b[0] }}</td>
+    <td>{{ b[5] }}</td>
+
+    <td>{{ b[1] }}</td>
+    <td>{{ b[2] }}</td>
+    <td>{{ b[3] }}</td>
+
+    <td>{{ b[4] }}</td>
+    <td>{{ b[6] }}</td>
+
+    <td>{{ b[8] }}</td>
+    <td>{{ b[9] }}</td>
+    <td>{{ b[10] }}</td>
+
+    <td>{{ b[11] }}</td>
+    <td>{{ b[12] }}</td>
+
+    <td>{{ b[13] }}</td>
+    <td>{{ b[14] }}</td>
+    <td>{{ b[15] }}</td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+<!-- UPDATE STATUS -->
+<div class="card">
+
+    <h3>Update Travel Status</h3>
+
+    <form method="POST" action="/update_travel_status">
+
+        <input type="number" name="booking_id" placeholder="Booking ID" required>
+
+        <select name="status" required>
+            <option value="">Select Status</option>
+            <option value="CONFIRMED">CONFIRMED</option>
+            <option value="DENIED">DENIED</option>
+        </select>
+
+        <button type="submit">Update Status</button>
+
+    </form>
+
+</div>
+
+</div>
+
+</body>
+</html>
