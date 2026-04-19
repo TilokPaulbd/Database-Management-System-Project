@@ -1,112 +1,618 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Missing Checking</title>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>DIU Smart Transport | Travel Status Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
+        body {
+            background: linear-gradient(145deg, #eef2f7 0%, #d9e0e8 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+        }
+
+        .app-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+
+        .navbar {
+            background: rgba(10, 45, 80, 0.95);
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 0.9rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 15px 35px rgba(0, 20, 30, 0.2);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .navbar h2 {
+            color: white;
+            font-weight: 600;
+            font-size: 1.6rem;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar h2 i {
+            background: #ffb347;
+            padding: 8px;
+            border-radius: 50%;
+            color: #1e2f3e;
+            font-size: 1.2rem;
+        }
+
+        .navbar a {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 40px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .navbar a:hover {
+            background: #ffb347;
+            color: #0a2d50;
+            border-color: #ffb347;
+            transform: translateY(-2px);
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .card:hover {
+            box-shadow: 0 20px 32px rgba(0,0,0,0.12);
+        }
+
+        .search-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+            background: #f8fafd;
+            border-radius: 2rem;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-box input {
+            flex: 2;
+            min-width: 200px;
+            padding: 0.9rem 1.2rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 3rem;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #ffb347;
+            box-shadow: 0 0 0 3px rgba(255,180,71,0.2);
+        }
+
+        .search-box button {
+            background: #0a2d50;
+            border: none;
+            padding: 0 2rem;
+            border-radius: 3rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .search-box button:hover {
+            background: #ffb347;
+            color: #0a2d50;
+            transform: scale(0.97);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 5px solid #ffb347;
+            padding-left: 1rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .booking-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .booking-table th {
+            background: #0f2c3f;
+            color: white;
+            padding: 14px 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .booking-table td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #eef2f6;
+            font-size: 0.85rem;
+            color: #1e2a3a;
+        }
+
+        .booking-table tr:hover td {
+            background-color: #fff7ed;
+        }
+
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .badge-confirmed {
+            background: #e0f2e9;
+            color: #0a6e3d;
+        }
+
+        .badge-denied {
+            background: #fee9e6;
+            color: #bc3900;
+        }
+
+        .update-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            align-items: flex-end;
+            background: #fefaf5;
+            border-radius: 1.8rem;
+            padding: 1.4rem 1.8rem;
+        }
+
+        .update-field {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .update-field label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #5c6f87;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .update-field input, .update-field select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 2rem;
+            border: 1.5px solid #e2e8f0;
+            background: white;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .update-field input:focus, .update-field select:focus {
+            border-color: #ffb347;
+            outline: none;
+        }
+
+        .update-btn {
+            background: #ffb347;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 3rem;
+            font-weight: 700;
+            color: #1e2a3a;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .update-btn:hover {
+            background: #ff9f1a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(255,180,71,0.3);
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 2rem;
+            background: #f9fafc;
+            border-radius: 1.5rem;
+            color: #5b6e8c;
+            font-weight: 500;
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #1f2d3d;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .toast-success {
+            background: #2b7a3e;
+            border-left: 6px solid #ffb347;
+        }
+
+        .toast-error {
+            background: #b91c1c;
+        }
+
+        .stats-badge {
+            display: inline-block;
+            background: #eef2ff;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            color: #0f3b5c;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #5a6e85;
+        }
+
+        @media (max-width: 680px) {
+            body {
+                padding: 1rem;
+            }
+            .navbar h2 {
+                font-size: 1.2rem;
+            }
+            .card {
+                padding: 1.2rem;
+            }
+        }
+        
+
+        .loader-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .loader {
+            background: white;
+            padding: 20px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+    </style>
+</head>
 <body>
 
-<div class="navbar">
-    <h2>Missing Checking System</h2>
-    <a href="/admin_dashboard">Back</a>
+<div class="app-wrapper">
+    <div class="navbar">
+        <h2><i class="fas fa-bus"></i> DIU Smart Transport System</h2>
+        <a href="/admin_dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h3><i class="fas fa-magnifying-glass"></i> Check Travel Details</h3>
+            <form class="search-box" id="searchForm" method="GET" action="/missing_checking.html">
+                <input type="number"
+                       name="bus_schedule_id"
+                       id="busScheduleIdInput"
+                       placeholder="Enter Bus Schedule ID"
+                       value="">
+                <button type="submit" id="searchBtn"><i class="fas fa-search"></i> Search Schedule</button>
+            </form>
+            <div class="stats-badge" id="resultInfo">
+                <i class="fas fa-info-circle"></i> Enter Bus Schedule ID to view passenger list
+            </div>
+        </div>
+
+        <div class="card" id="bookingCard">
+            <h3><i class="fas fa-ticket-alt"></i> View Booking </h3>
+            <div class="table-responsive">
+                <table class="booking-table" id="bookingTable">
+                    <thead>
+                        <tr>
+                            <th>Schedule ID</th><th>Booking ID</th><th>Seat No</th>
+                            <th>Student ID</th><th>Student Name</th><th>Email</th>
+                            <th>Seat ID</th><th>Bus Schedule ID</th>
+                            <th>Journey Date</th><th>Start Time</th><th>End Time</th>
+                            <th>Start Destination</th><th>End Destination</th>
+                            <th>Bus ID</th><th>Bus Name</th><th>Booking Time</th>
+                            <th>Travel Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        {% if bookings %}
+                            {% for b in bookings %}
+                            <tr>
+                                <td>{{ b[7] }}</td>
+                                <td>{{ b[0] }}</td>
+                                <td>{{ b[5] }}</td>
+                                <td>{{ b[1] }}</td>
+                                <td>{{ b[2] }}</td>
+                                <td>{{ b[3] }}</td>
+                                <td>{{ b[4] }}</td>
+                                <td>{{ b[6] }}</td>
+                                <td>{{ b[8] }}</td>
+                                <td>{{ b[9] }}</td>
+                                <td>{{ b[10] }}</td>
+                                <td>{{ b[11] }}</td>
+                                <td>{{ b[12] }}</td>
+                                <td>{{ b[13] }}</td>
+                                <td>{{ b[14] }}</td>
+                                <td>{{ b[15] }}</td>
+                                <td class="status-cell" data-booking-id="{{ b[0] }}">
+                                    <span class="badge-status {% if b[16] == 'CONFIRMED' %}badge-confirmed{% elif b[16] == 'DENIED' %}badge-denied{% endif %}">
+                                        {{ b[16] if b[16] else 'PENDING' }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="17" class="empty-message">
+                                    <i class="fas fa-bus-simple"></i> No bookings found. Enter a Bus Schedule ID to search.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-sync-alt"></i> Update Travel Status</h3>
+            <form method="POST" action="/update_travel_status" id="updateStatusForm">
+                <div class="update-area">
+                    <div class="update-field">
+                        <label><i class="fas fa-hashtag"></i> Booking ID</label>
+                        <input type="number" name="booking_id" id="bookingIdInput" placeholder="Enter Booking ID" required>
+                    </div>
+                    <div class="update-field">
+                        <label><i class="fas fa-flag-checkered"></i> New Status</label>
+                        <select name="status" id="statusSelect" required>
+                            <option value="">Select Status</option>
+                            <option value="CONFIRMED">✅ CONFIRMED</option>
+                            <option value="DENIED">❌ DENIED</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="update-btn" id="updateBtn"><i class="fas fa-pen-alt"></i> Update Status</button>
+                </div>
+            </form>
+           
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-map-marked-alt"></i> Daffodil International University | Spring 2026 66_C2
+    </footer>
 </div>
 
-<div class="container">
-
-
-<form class="search-box" method="GET" action="/missing_checking.html">
-
-    <input type="number"
-           name="bus_schedule_id"
-           placeholder="Enter Bus Schedule ID"
-           value="{{ bus_schedule_id if bus_schedule_id != 0 else '' }}">
-
-    <button type="submit">Search</button>
-
-</form>
-
-<h3>View Booking By Bus Schedule</h3>
-
-
-<table>
-
-<tr>
-    <th>Schedule ID</th>
-    <th>Booking ID</th>
-    <th>Seat No</th>
-
-    <th>Student ID</th>
-    <th>Student Name</th>
-    <th>Email</th>
-
-    <th>Seat ID</th>
-    <th>Bus Schedule ID</th>
-
-    <th>Journey Date</th>
-    <th>Start Time</th>
-    <th>End Time</th>
-
-    <th>Start Destination</th>
-    <th>End Destination</th>
-
-    <th>Bus ID</th>
-    <th>Bus Name</th>
-    <th>Booking Time</th>
-</tr>
-
-{% for b in bookings %}
-<tr>
-
-    <td>{{ b[7] }}</td>
-    <td>{{ b[0] }}</td>
-    <td>{{ b[5] }}</td>
-
-    <td>{{ b[1] }}</td>
-    <td>{{ b[2] }}</td>
-    <td>{{ b[3] }}</td>
-
-    <td>{{ b[4] }}</td>
-    <td>{{ b[6] }}</td>
-
-    <td>{{ b[8] }}</td>
-    <td>{{ b[9] }}</td>
-    <td>{{ b[10] }}</td>
-
-    <td>{{ b[11] }}</td>
-    <td>{{ b[12] }}</td>
-
-    <td>{{ b[13] }}</td>
-    <td>{{ b[14] }}</td>
-    <td>{{ b[15] }}</td>
-
-</tr>
-{% endfor %}
-
-</table>
-
-<!-- UPDATE STATUS -->
-<div class="card">
-
-    <h3>Update Travel Status</h3>
-
-    <form method="POST" action="/update_travel_status">
-
-        <input type="number" name="booking_id" placeholder="Booking ID" required>
-
-        <select name="status" required>
-            <option value="">Select Status</option>
-            <option value="CONFIRMED">CONFIRMED</option>
-            <option value="DENIED">DENIED</option>
-        </select>
-
-        <button type="submit">Update Status</button>
-
-    </form>
-
+<div id="loaderOverlay" class="loader-overlay">
+    <div class="loader"><i class="fas fa-spinner fa-pulse"></i> Updating status...</div>
 </div>
 
-</div>
+<script>
+   
+    
+    (function() {
+        
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
 
+       
+        const busScheduleInput = document.getElementById('busScheduleIdInput');
+        const scheduleIdFromUrl = getQueryParam('bus_schedule_id');
+        if (scheduleIdFromUrl && scheduleIdFromUrl !== '0') {
+            busScheduleInput.value = scheduleIdFromUrl;
+        }
+
+        
+        const updateForm = document.getElementById('updateStatusForm');
+        const loaderOverlay = document.getElementById('loaderOverlay');
+        const updateBtn = document.getElementById('updateBtn');
+        
+        if (updateForm) {
+            updateForm.addEventListener('submit', function(e) {
+                const bookingId = document.getElementById('bookingIdInput').value.trim();
+                const status = document.getElementById('statusSelect').value;
+                
+               
+                if (!bookingId) {
+                    e.preventDefault();
+                    return false;
+                }
+                if (!status) {
+                    e.preventDefault();
+                    return false;
+                }
+                
+               
+                loaderOverlay.style.display = 'flex';
+                
+                return true;
+            });
+        }
+        
+        
+        
+        if (window.location.search.includes('updated=1')) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('updated');
+            window.history.replaceState({}, document.title, url.pathname + (url.search ? url.search : ''));
+        } else if (window.location.search.includes('error=1')) {
+        }
+        
+        const allRows = document.querySelectorAll('#tableBody tr');
+        allRows.forEach(row => {
+            const bookingIdCell = row.cells && row.cells[1]; 
+            if (bookingIdCell && bookingIdCell.innerText && !isNaN(parseInt(bookingIdCell.innerText))) {
+                const bookingIdValue = bookingIdCell.innerText.trim();
+               
+                row.style.cursor = 'pointer';
+                row.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'SELECT') return;
+                    const bookingInput = document.getElementById('bookingIdInput');
+                    if (bookingInput) {
+                        bookingInput.value = bookingIdValue;
+                        document.getElementById('statusSelect').focus();
+                    }
+                });
+            }
+        });
+        
+
+        function enhanceStatusBadges() {
+            const statusCells = document.querySelectorAll('.status-cell');
+            statusCells.forEach(cell => {
+                const span = cell.querySelector('span');
+                if (span) {
+                    const statusText = span.innerText.trim().toUpperCase();
+                    span.classList.remove('badge-confirmed', 'badge-denied');
+                    if (statusText === 'CONFIRMED') {
+                        span.classList.add('badge-confirmed');
+                    } else if (statusText === 'DENIED') {
+                        span.classList.add('badge-denied');
+                    } else {
+                        span.style.background = "#f1f3f5";
+                        span.style.color = "#5c6f87";
+                    }
+                    span.classList.add('badge-status');
+                }
+            });
+        }
+        
+
+        const rows = document.querySelectorAll('#tableBody tr');
+        rows.forEach(row => {
+            const cells = row.cells;
+            if (cells.length === 17 && cells[16]) {
+                const statusText = cells[16].innerText.trim();
+                if (statusText && (statusText === 'CONFIRMED' || statusText === 'DENIED')) {
+                    let badgeSpan = cells[16].querySelector('span');
+                    if (!badgeSpan) {
+                        badgeSpan = document.createElement('span');
+                        badgeSpan.className = 'badge-status';
+                        badgeSpan.innerText = statusText;
+                        cells[16].innerHTML = '';
+                        cells[16].appendChild(badgeSpan);
+                    }
+                    if (statusText === 'CONFIRMED') badgeSpan.classList.add('badge-confirmed');
+                    if (statusText === 'DENIED') badgeSpan.classList.add('badge-denied');
+                }
+            } else if (cells.length === 16) {
+                console.log("Tip: Add Travel Status column in backend (b[16]) to see status badges.");
+            }
+        });
+        
+        enhanceStatusBadges();
+
+        const searchForm = document.getElementById('searchForm');
+        if (searchForm) {
+            searchForm.addEventListener('submit', function() {
+                const inputVal = busScheduleInput.value;
+                if (!inputVal) {
+                
+                }
+            });
+        }
+        
+        window.addEventListener('load', function() {
+            loaderOverlay.style.display = 'none';
+            const tbody = document.getElementById('tableBody');
+            if (tbody && tbody.children.length === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `<td colspan="17" class="empty-message"><i class="fas fa-search"></i> No bookings found. Try another Bus Schedule ID.</td>`;
+                tbody.appendChild(emptyRow);
+            }
+            
+            if (scheduleIdFromUrl && scheduleIdFromUrl !== '0') {
+                const infoDiv = document.getElementById('resultInfo');
+                const rowCount = document.querySelectorAll('#tableBody tr:not(.empty-message)').length;
+                if (rowCount > 0) {
+                    infoDiv.innerHTML = `<i class="fas fa-chart-simple"></i> schedule - ${scheduleIdFromUrl}  .     passenger's -  ${rowCount}  `;
+                } else {
+                    infoDiv.innerHTML = `<i class="fas fa-info-circle"></i> Schedule ${scheduleIdFromUrl} has no bookings. Try a different ID.`;
+                }
+            }
+        });
+        if (scheduleIdFromUrl) {
+        }
+        console.log("DIU Smart Transport System | Backend integrated mode — no demo data, only live server data.");
+    })();
+</script>
 </body>
 </html>

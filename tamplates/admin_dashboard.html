@@ -2,228 +2,664 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Admin Dashboard</title>
-</head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>TransitFlow | Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #f1f5f9;
+        color: #0f172a;
+        line-height: 1.5;
+        min-height: 100vh;
+    }
+
+   
+    .navbar {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar h2 {
+        font-weight: 600;
+        font-size: 1.6rem;
+        letter-spacing: -0.3px;
+        background: linear-gradient(120deg, #e0f2fe, #bae6fd);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .navbar h2 i {
+        color: #38bdf8;
+        background: none;
+        -webkit-background-clip: unset;
+        font-size: 1.7rem;
+    }
+
+    .navbar a {
+        background: rgba(255,255,255,0.12);
+        color: #f1f5f9;
+        text-decoration: none;
+        padding: 0.5rem 1.2rem;
+        border-radius: 60px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+    }
+
+    .navbar a i {
+        font-size: 0.9rem;
+    }
+
+    .navbar a:hover {
+        background: #ef4444;
+        color: white;
+        transform: scale(0.97);
+        box-shadow: 0 4px 12px rgba(239,68,68,0.3);
+    }
+
+   
+    .container {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 0 1.8rem;
+    }
+
+   
+    .menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 2.2rem;
+        background: white;
+        padding: 1rem 1.2rem;
+        border-radius: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        border: 1px solid #e2e8f0;
+        justify-content: center;
+    }
+
+    .menu button {
+        background: #f8fafc;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 40px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        font-family: 'Inter', sans-serif;
+        color: #1e293b;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .menu button i {
+        font-size: 0.85rem;
+        color: #3b82f6;
+    }
+
+    .menu button:hover {
+        background: #eef2ff;
+        border-color: #cbd5e1;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+    }
+
+    .menu button:active {
+        transform: translateY(1px);
+    }
+
+   
+    .table-section, .card {
+        display: none;
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .table-section.active, .card.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+        animation: subtlePop 0.3s ease-out;
+    }
+
+    @keyframes subtlePop {
+        0% { opacity: 0; transform: scale(0.98); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+ 
+    .card, .table-section {
+        background: white;
+        border-radius: 28px;
+        padding: 1.8rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.08);
+        border: 1px solid #eef2f6;
+        transition: box-shadow 0.2s;
+    }
+
+    .card:hover, .table-section:hover {
+        box-shadow: 0 24px 36px -14px rgba(0, 0, 0, 0.12);
+    }
+
+    h2, h3 {
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-left: 5px solid #3b82f6;
+        padding-left: 1rem;
+        color: #0f172a;
+    }
+
+    h2 i, h3 i {
+        color: #3b82f6;
+        font-size: 1.4rem;
+    }
+
+
+    .table-wrapper {
+        overflow-x: auto;
+        border-radius: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    th {
+        background: #f1f5f9;
+        padding: 1rem 0.8rem;
+        text-align: left;
+        font-weight: 600;
+        color: #1e293b;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    td {
+        padding: 0.85rem 0.8rem;
+        border-bottom: 1px solid #f0f2f5;
+        color: #334155;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background-color: #fafcff;
+    }
+
+    .empty-row td {
+        text-align: center;
+        color: #64748b;
+        font-style: italic;
+        padding: 2rem;
+    }
+
+
+    .card form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-end;
+        margin-top: 0.5rem;
+    }
+
+    .card input {
+        flex: 1 1 180px;
+        padding: 0.8rem 1rem;
+        border-radius: 60px;
+        border: 1px solid #cbd5e1;
+        font-family: 'Inter', sans-serif;
+        background: #ffffff;
+        transition: all 0.2s;
+        font-size: 0.85rem;
+    }
+
+    .card input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+    }
+
+    .card button {
+        background: #3b82f6;
+        border: none;
+        padding: 0.7rem 1.8rem;
+        border-radius: 40px;
+        font-weight: 600;
+        color: white;
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .card button:hover {
+        background: #2563eb;
+        transform: scale(0.98);
+        box-shadow: 0 8px 16px -6px #3b82f680;
+    }
+
+    
+    .badge {
+        display: inline-block;
+        padding: 0.2rem 0.7rem;
+        border-radius: 30px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+    .badge-paid { background: #dcfce7; color: #15803d; }
+    .badge-pending { background: #ffe4e2; color: #b91c1c; }
+
+    
+    @media (max-width: 760px) {
+        .container { padding: 0 1rem; }
+        .menu button { padding: 0.5rem 1rem; font-size: 0.75rem; }
+        .card form { flex-direction: column; align-items: stretch; }
+        .card button { width: 100%; justify-content: center; }
+        .navbar h2 { font-size: 1.3rem; }
+    }
+
+    footer {
+        text-align: center;
+        margin-top: 2rem;
+        font-size: 0.75rem;
+        color: #94a3b8;
+        padding: 1rem;
+    }
+</style>
+</head>
 <body>
 
 <div class="navbar">
-    <h2>Admin Dashboard</h2>
-    <a href="/logout">Logout</a>
+    <h2><i class="fas fa-bus-alt"></i> Smart DIU Transport System | Admin Dashboard</h2>
+    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
 </div>
 
 <div class="container">
 
-
 <div class="menu">
-
-    <button onclick="showTable('journey')">Journey</button>
-    <button onclick="showTable('routes')">Routes</button>
-    <button onclick="showTable('buses')">Buses</button>
-    <button onclick="showTable('schedules')">Schedules</button>
-    <button onclick="showTable('assignments')">Assignments</button>
-    <button onclick="showTable('semesters')">Semesters</button>
-    <button onclick="showTable('payments')">Payments</button>
-
-    <button onclick="showForm('route')">Add Route</button>
-    <button onclick="showForm('bus')">Add Bus</button>
-    <button onclick="showForm('schedule')">Add Schedule</button>
-    <button onclick="showForm('assign')">Assign Bus</button>
-    <button onclick="showForm('semester')">Add Semester</button>
-    <button onclick="showForm('payment')">Add Payment</button>
-
-    <button onclick="window.location.href='/missing_checking.html'">
-        Checking Travel Status
-    </button>
-
+    <button onclick="showTable('journey')"><i class="fas fa-map-marked-alt"></i> Journey</button>
+    <button onclick="showTable('routes')"><i class="fas fa-route"></i> Routes</button>
+    <button onclick="showTable('buses')"><i class="fas fa-bus"></i> Buses</button>
+    <button onclick="showTable('schedules')"><i class="fas fa-calendar-week"></i> Schedules</button>
+    <button onclick="showTable('assignments')"><i class="fas fa-clipboard-list"></i> Assignments</button>
+    <button onclick="showTable('semesters')"><i class="fas fa-graduation-cap"></i> Semesters</button>
+    <button onclick="showTable('payments')"><i class="fas fa-credit-card"></i> Payments</button>
+    <span style="width: 1px; background:#e2e8f0; margin:0 0.2rem;"></span>
+    <button onclick="showForm('route')"><i class="fas fa-plus-circle"></i> Add Route</button>
+    <button onclick="showForm('bus')"><i class="fas fa-plus-circle"></i> Add Bus</button>
+    <button onclick="showForm('schedule')"><i class="fas fa-plus-circle"></i> Add Schedule</button>
+    <button onclick="showForm('assign')"><i class="fas fa-exchange-alt"></i> Assign Bus</button>
+    <button onclick="showForm('semester')"><i class="fas fa-plus-circle"></i> Add Semester</button>
+    <button onclick="showForm('payment')"><i class="fas fa-hand-holding-usd"></i> Add Payment</button>
+    <button onclick="window.location.href='/missing_checking.html'"><i class="fas fa-clipboard-check"></i> Checking</button>
 </div>
 
+<!-- JOURNEY  -->
 <div id="journey" class="table-section active">
-<h2>Journey View</h2>
-
-<table>
-<tr>
-<th>Schedule ID</th><th>Route ID</th><th>Assign ID</th>
-<th>Date</th><th>From</th><th>To</th>
-<th>Start</th><th>End</th><th>Bus ID</th><th>Bus Name</th>
-</tr>
-
-{% for j in journeys %}
-<tr>
-<td>{{ j[0] }}</td>
-<td>{{ j[1] }}</td>
-<td>{{ j[2] }}</td>
-<td>{{ j[3] }}</td>
-<td>{{ j[4] }}</td>
-<td>{{ j[5] }}</td>
-<td>{{ j[6] }}</td>
-<td>{{ j[7] }}</td>
-<td>{{ j[8] }}</td>
-<td>{{ j[9] }}</td>
-</tr>
-{% endfor %}
-
-</table>
+    <h2><i class="fas fa-chart-line"></i> Route Schedule</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr><th>Schedule ID</th><th>Route ID</th><th>Assign ID</th>
+                <th>Date</th><th>From</th><th>To</th>
+                <th>Start</th><th>End</th><th>Bus ID</th><th>Bus Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for j in journeys %}
+                <tr>
+                    <td>{{ j[0] }}</td>
+                    <td>{{ j[1] }}</td>
+                    <td>{{ j[2] }}</td>
+                    <td>{{ j[3] }}</td>
+                    <td>{{ j[4] }}</td>
+                    <td>{{ j[5] }}</td>
+                    <td>{{ j[6] }}</td>
+                    <td>{{ j[7] }}</td>
+                    <td>{{ j[8] }}</td>
+                    <td>{{ j[9] }}</td>
+                </tr>
+                {% else %}
+                <tr class="empty-row"><td colspan="10">No journey records found</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!-- ROUTES -->
 <div id="routes" class="table-section">
-<h2>Routes</h2>
-<table>
-<tr><th>ID</th><th>Start</th><th>End</th></tr>
-{% for r in routes %}
-<tr><td>{{ r[0] }}</td><td>{{ r[1] }}</td><td>{{ r[2] }}</td></tr>
-{% endfor %}
-</table>
+    <h2><i class="fas fa-map-signs"></i> Routes</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>ID</th><th>Start</th><th>End</th></tr></thead>
+            <tbody>
+                {% for r in routes %}
+                <tr><td>{{ r[0] }}</td><td>{{ r[1] }}</td><td>{{ r[2] }}</td></tr>
+                {% else %}
+                <tr class="empty-row"><td colspan="3">No routes available</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
-
+<!-- BUSES -->
 <div id="buses" class="table-section">
-<h2>Buses</h2>
-<table>
-<tr><th>ID</th><th>Name</th></tr>
-{% for b in buses %}
-<tr><td>{{ b[0] }}</td><td>{{ b[1] }}</td></tr>
-{% endfor %}
-</table>
+    <h2><i class="fas fa-truck"></i> Buses</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>ID</th><th>Name</th></tr></thead>
+            <tbody>
+                {% for b in buses %}
+                <tr><td>{{ b[0] }}</td><td>{{ b[1] }}</td></tr>
+                {% else %}
+                <tr class="empty-row"><td colspan="2">No buses registered</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<
+<!-- SCHEDULES -->
 <div id="schedules" class="table-section">
-<h2>Schedules</h2>
-<table>
-<tr><th>ID</th><th>Route</th><th>Date</th><th>Start</th><th>End</th></tr>
-{% for s in schedules %}
-<tr>
-<td>{{ s[0] }}</td>
-<td>{{ s[1] }}</td>
-<td>{{ s[2] }}</td>
-<td>{{ s[3] }}</td>
-<td>{{ s[4] }}</td>
-</tr>
-{% endfor %}
-</table>
+    <h2><i class="fas fa-hourglass-half"></i> Schedules</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>ID</th><th>Route</th><th>Date</th><th>Start</th><th>End</th></tr></thead>
+            <tbody>
+                {% for s in schedules %}
+                <tr>
+                    <td>{{ s[0] }}</td>
+                    <td>{{ s[1] }}</td>
+                    <td>{{ s[2] }}</td>
+                    <td>{{ s[3] }}</td>
+                    <td>{{ s[4] }}</td>
+                </tr>
+                {% else %}
+                <tr class="empty-row"><td colspan="5">No schedules found</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
-
+<!-- ASSIGNMENTS -->
 <div id="assignments" class="table-section">
-<h2>Assignments</h2>
-<table>
-<tr><th>ID</th><th>Bus</th><th>Name</th><th>Schedule</th><th>Date</th></tr>
-{% for bs in bus_schedules %}
-<tr>
-<td>{{ bs[0] }}</td><td>{{ bs[1] }}</td><td>{{ bs[2] }}</td>
-<td>{{ bs[3] }}</td><td>{{ bs[4] }}</td>
-</tr>
-{% endfor %}
-</table>
+    <h2><i class="fas fa-calendar-check"></i> Assignments</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>ID</th><th>Bus</th><th>Name</th><th>Schedule</th><th>Date</th></tr></thead>
+            <tbody>
+                {% for bs in bus_schedules %}
+                <tr>
+                    <td>{{ bs[0] }}</td>
+                    <td>{{ bs[1] }}</td>
+                    <td>{{ bs[2] }}</td>
+                    <td>{{ bs[3] }}</td>
+                    <td>{{ bs[4] }}</td>
+                </tr>
+                {% else %}
+                <tr class="empty-row"><td colspan="5">No bus assignments</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
-
+<!-- SEMESTERS -->
 <div id="semesters" class="table-section">
-<h2>Semesters</h2>
-<table>
-<tr><th>ID</th><th>Name</th></tr>
-{% for s in semesters %}
-<tr><td>{{ s[0] }}</td><td>{{ s[1] }}</td></tr>
-{% endfor %}
-</table>
+    <h2><i class="fas fa-school"></i> Semesters</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>ID</th><th>Name</th></tr></thead>
+            <tbody>
+                {% for s in semesters %}
+                <tr><td>{{ s[0] }}</td><td>{{ s[1] }}</td></tr>
+                {% else %}
+                <tr class="empty-row"><td colspan="2">No semesters defined</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
-
+<!-- PAYMENTS -->
 <div id="payments" class="table-section">
-<h2>Payments</h2>
-<table>
-<tr><th>ID</th><th>Student</th><th>Semester</th><th>Status</th></tr>
-{% for p in payments %}
-<tr>
-<td>{{ p[0] }}</td><td>{{ p[1] }}</td>
-<td>{{ p[2] }}</td><td>{{ p[3] }}</td>
-</tr>
-{% endfor %}
-</table>
+    <h2><i class="fas fa-coins"></i> Payments</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>ID</th><th>Student</th><th>Semester</th><th>Status</th></tr></thead>
+            <tbody>
+                {% for p in payments %}
+                <tr>
+                    <td>{{ p[0] }}</td>
+                    <td>{{ p[1] }}</td>
+                    <td>{{ p[2] }}</td>
+                    <td class="payment-status-cell">
+                        {% set status = p[3]|string %}
+                        {% if status.lower() == 'paid' %}
+                        <span class="badge badge-paid">Paid</span>
+                        {% elif status.lower() == 'pending' %}
+                        <span class="badge badge-pending">Pending</span>
+                        {% else %}
+                        {{ p[3] }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr class="empty-row"><td colspan="4">No payment records</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-
 
 
 <div class="card" id="route">
-<h3>Add Route</h3>
-<form method="POST" action="/add_route">
-<input name="r_id">
-<input name="r_start">
-<input name="r_end">
-<button>Submit</button>
-</form>
+    <h3><i class="fas fa-plus"></i> Add Route</h3>
+    <form method="POST" action="/add_route">
+        <input name="r_id" placeholder="Route ID (e.g., R101)" required>
+        <input name="r_start" placeholder="Start location" required>
+        <input name="r_end" placeholder="End location" required>
+        <button type="submit"><i class="fas fa-save"></i> Submit</button>
+    </form>
 </div>
 
 <div class="card" id="bus">
-<h3>Add Bus</h3>
-<form method="POST" action="/add_bus">
-<input name="b_id">
-<input name="b_name">
-<button>Submit</button>
-</form>
+    <h3><i class="fas fa-plus"></i> Add Bus</h3>
+    <form method="POST" action="/add_bus">
+        <input name="b_id" placeholder="Bus ID" required>
+        <input name="b_name" placeholder="Bus Name" required>
+        <button type="submit"><i class="fas fa-save"></i> Submit</button>
+    </form>
 </div>
 
 <div class="card" id="schedule">
-<h3>Add Schedule</h3>
-<form method="POST" action="/add_schedule">
-<input name="s_id">
-<input name="r_id">
-<input type="date" name="j_date">
-<input type="time" name="s_time">
-<input type="time" name="e_time">
-<button>Submit</button>
-</form>
+    <h3><i class="fas fa-clock"></i> Add Schedule</h3>
+    <form method="POST" action="/add_schedule">
+        <input name="s_id" placeholder="Schedule ID" required>
+        <input name="r_id" placeholder="Route ID" required>
+        <input type="date" name="j_date" required>
+        <input type="time" name="s_time" required>
+        <input type="time" name="e_time" required>
+        <button type="submit"><i class="fas fa-plus"></i> Submit</button>
+    </form>
 </div>
 
 <div class="card" id="assign">
-<h3>Assign Bus</h3>
-<form method="POST" action="/assign_bus_schedule">
-<input name="bs_id">
-<input name="b_id">
-<input name="s_id">
-<button>Submit</button>
-</form>
+    <h3><i class="fas fa-random"></i> Assign Bus</h3>
+    <form method="POST" action="/assign_bus_schedule">
+        <input name="bs_id" placeholder="Assignment ID" required>
+        <input name="b_id" placeholder="Bus ID" required>
+        <input name="s_id" placeholder="Schedule ID" required>
+        <button type="submit"><i class="fas fa-link"></i> Submit</button>
+    </form>
 </div>
 
 <div class="card" id="semester">
-<h3>Add Semester</h3>
-<form method="POST" action="/add_semester">
-<input name="semester_id">
-<input name="semester_name">
-<button>Submit</button>
-</form>
+    <h3><i class="fas fa-calendar-alt"></i> Add Semester</h3>
+    <form method="POST" action="/add_semester">
+        <input name="semester_id" placeholder="Semester ID" required>
+        <input name="semester_name" placeholder="Semester name " required>
+        <button type="submit"><i class="fas fa-plus"></i> Submit</button>
+    </form>
 </div>
 
 <div class="card" id="payment">
-<h3>Add Payment</h3>
-<form method="POST" action="/add_payment">
-<input name="payment_id">
-<input name="student_id">
-<input name="semester_id">
-<input name="payment_status">
-<button>Submit</button>
-</form>
+    <h3><i class="fas fa-money-bill-wave"></i> Add Payment</h3>
+    <form method="POST" action="/add_payment">
+        <input name="payment_id" placeholder="Payment ID" required>
+        <input name="student_id" placeholder="Student ID" required>
+        <input name="semester_id" placeholder="Semester ID" required>
+        <input name="payment_status" placeholder="Status (Paid/Pending)" required>
+        <button type="submit"><i class="fas fa-check-circle"></i> Submit</button>
+    </form>
 </div>
 
 </div>
+
+<footer>© Daffodil International University | Spring 2026 66_C2</footer>
 
 <script>
-function hideAll() {
-    document.querySelectorAll(".table-section").forEach(e => e.classList.remove("active"));
-    document.querySelectorAll(".card").forEach(e => e.classList.remove("active"));
-}
+    
+    function hideAll() {
+        document.querySelectorAll(".table-section").forEach(e => e.classList.remove("active"));
+        document.querySelectorAll(".card").forEach(e => e.classList.remove("active"));
+    }
 
-function showTable(id) {
-    hideAll();
-    document.getElementById(id).classList.add("active");
-}
+    function showTable(id) {
+        hideAll();
+        const target = document.getElementById(id);
+        if(target) {
+            target.classList.add("active");
+            
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
 
-function showForm(id) {
-    hideAll();
-    document.getElementById(id).classList.add("active");
-}
+    function showForm(id) {
+        hideAll();
+        const target = document.getElementById(id);
+        if(target) {
+            target.classList.add("active");
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    
+    window.showTable = showTable;
+    window.showForm = showForm;
+
+    
+    const allForms = document.querySelectorAll('.card form');
+    allForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button');
+            if(submitBtn) {
+                const originalHTML = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Sending...';
+                submitBtn.disabled = true;
+                setTimeout(() => {
+                    if(submitBtn) {
+                        submitBtn.innerHTML = originalHTML;
+                        submitBtn.disabled = false;
+                    }
+                }, 2000);
+            }
+            
+        });
+    });
+
+    
+    function applyPaymentBadges() {
+        const paymentTable = document.querySelector('#payments table tbody');
+        if(!paymentTable) return;
+        const rows = paymentTable.querySelectorAll('tr');
+        rows.forEach(row => {
+            if(row.classList.contains('empty-row')) return;
+            const statusCell = row.cells[3];
+            if(statusCell && !statusCell.querySelector('.badge')) {
+                let rawStatus = statusCell.innerText.trim();
+                if(rawStatus.toLowerCase() === 'paid') {
+                    statusCell.innerHTML = `<span class="badge badge-paid">Paid</span>`;
+                } else if(rawStatus.toLowerCase() === 'pending') {
+                    statusCell.innerHTML = `<span class="badge badge-pending">Pending</span>`;
+                }
+            }
+        });
+    }
+
+    
+    window.addEventListener('DOMContentLoaded', () => {
+        applyPaymentBadges();
+        
+        
+        const btns = document.querySelectorAll('.menu button');
+        btns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                this.style.transform = 'scale(0.96)';
+                setTimeout(() => { if(this) this.style.transform = ''; }, 120);
+            });
+        });
+        
+        
+        const anyActive = document.querySelector('.table-section.active, .card.active');
+        if(!anyActive) {
+            const journeyDiv = document.getElementById('journey');
+            if(journeyDiv) journeyDiv.classList.add('active');
+        }
+    });
+
+    
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if(mutation.type === 'childList' || mutation.type === 'subtree') {
+                applyPaymentBadges();
+            }
+        });
+    });
+    const paymentContainer = document.querySelector('#payments table tbody');
+    if(paymentContainer) {
+        observer.observe(paymentContainer, { childList: true, subtree: true });
+    }
 </script>
 
 </body>

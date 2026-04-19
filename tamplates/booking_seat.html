@@ -1,104 +1,550 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Seat Booking</title>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>DIU Smart Transport | Seat Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
 
+        body {
+            background: linear-gradient(145deg, #eef2f7 0%, #dce3ec 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            background: #0a2d50;
+            border-radius: 1.5rem;
+            padding: 0.9rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .navbar h2 {
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar h2 i {
+            background: #ffb347;
+            padding: 8px;
+            border-radius: 50%;
+            color: #0a2d50;
+        }
+
+        .navbar a {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1.3rem;
+            border-radius: 2rem;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .navbar a:hover {
+            background: #ffb347;
+            color: #0a2d50;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #1e2a3e;
+            border-left: 5px solid #ffb347;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        h3, h4 {
+            margin: 0.75rem 0;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 i, h4 i {
+            color: #ffb347;
+        }
+
+        hr {
+            margin: 1.2rem 0;
+            border: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ffb347, #e0e7ef);
+        }
+
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 12px;
+            margin: 1.8rem 0;
+            background: #f8fafc;
+            padding: 1.8rem;
+            border-radius: 1.5rem;
+            box-shadow: inset 0 1px 4px #0001, 0 2px 6px #0001;
+        }
+
+        .seat {
+            background: #e2e8f0;
+            border-radius: 14px;
+            text-align: center;
+            padding: 14px 6px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #1e293b;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .seat.available {
+            background: #dcfce7;
+            color: #166534;
+            cursor: pointer;
+            border-color: #86efac;
+        }
+
+        .seat.available:hover {
+            background: #ffd89a;
+            transform: scale(1.03);
+            border-color: #ffb347;
+            color: #1e2a3a;
+        }
+
+        .seat.selected {
+            background: #ffb347;
+            color: #1e2a3a;
+            border-color: white;
+            box-shadow: 0 6px 14px rgba(255,180,71,0.4);
+            transform: scale(1.02);
+        }
+
+        .seat.unavailable {
+            background: #cbd5e1;
+            color: #64748b;
+            cursor: not-allowed;
+            text-decoration: line-through;
+            opacity: 0.7;
+            border-color: #94a3b8;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1rem 0 1.5rem;
+            padding: 0.8rem 1rem;
+            background: #f1f5f9;
+            border-radius: 3rem;
+            justify-content: center;
+        }
+
+        .legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .legend .box {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .box.avail {
+            background: #dcfce7;
+            border: 1px solid #86efac;
+        }
+        .box.unavail {
+            background: #cbd5e1;
+            text-decoration: line-through;
+        }
+        .box.selected-box {
+            background: #ffb347;
+        }
+
+        button[type="submit"] {
+            background: #ffb347;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 3rem;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            max-width: 320px;
+            display: block;
+            margin: 1rem auto 0;
+            color: #1e2a3a;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        button[type="submit"]:hover {
+            background: #ff9f1a;
+            transform: scale(1.02);
+            box-shadow: 0 8px 18px rgba(255,180,71,0.3);
+        }
+
+        .info-banner {
+            background: #fff7e5;
+            border-radius: 1rem;
+            padding: 0.7rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #b85c00;
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #1f2d3d;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 680px) {
+            .seat-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 8px;
+                padding: 1rem;
+            }
+            .seat {
+                padding: 10px 4px;
+                font-size: 0.8rem;
+            }
+            .card {
+                padding: 1.2rem;
+            }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            color: #5a6e85;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
 <body>
 
 <div class="container">
+    <div class="navbar">
+        <h2><i class="fas fa-bus"></i> Smart DIU Transport System</h2>
+    </div>
 
     <div class="card">
-
-        <h2>Booking Date: {{ date }}</h2>
-        <h3>Bus ID: {{ bus_id }}</h3>
-
-        <h3>
-            Student ID: <span id="studentDisplay">{{ student_id }}</span>
-        </h3>
-
-        <h4>Bus Schedule ID: {{ bus_schedule_id }}</h4>
-
+        <h2><i class="fas fa-calendar-check"></i> Booking Date: {{ date }}</h2>
+        <h3><i class="fas fa-bus"></i> Bus ID: {{ bus_id }}</h3>
+        <h3><i class="fas fa-user-graduate"></i> Student ID: <span id="studentDisplay">{{ student_id }}</span></h3>
+        <h4><i class="fas fa-ticket-alt"></i> Bus Schedule ID: {{ bus_schedule_id }}</h4>
+        
         <hr>
 
-        <h3>Select Seat (1–40)</h3>
-        <div id="seatGrid"></div>
+        <h3><i class="fas fa-chair"></i> Select Seat (1–40)</h3>
+        
+        <!-- seat status -->
+        <div class="legend">
+            <span><i class="box avail"></i> Available</span>
+            <span><i class="box unavailable"></i> Booked / Unavailable</span>
+            <span><i class="box selected-box"></i> Selected</span>
+        </div>
+
+        <!-- Seat Grid  -->
+        <div id="seatGrid" class="seat-grid"></div>
 
         <form method="POST" action="/add_booking" onsubmit="return validateForm()">
-
             <input type="hidden" name="student_id" value="{{ student_id }}">
             <input type="hidden" name="bus_schedule_id" value="{{ bus_schedule_id }}">
             <input type="hidden" id="seatInput" name="seat_id">
-
-            <br><br>
-            <button type="submit">Confirm Booking</button>
+            <input type="hidden" id="journeyDateHidden" name="journey_date" value="{{ date }}">
+            <button type="submit"><i class="fas fa-check-circle"></i> Confirm Booking</button>
         </form>
-
+        
+        
     </div>
-
+    <footer>
+        <i class="fas fa-map-marked-alt"></i> Daffodil International University | Spring 2026 66_C2
+    </footer>
 </div>
 
 <script>
 
-let student_id = "{{ student_id }}";
-let bus_id = "{{ bus_id }}";
+    let student_id = "{{ student_id }}";
+    let bus_id = "{{ bus_id }}";
+    let bus_schedule_id = "{{ bus_schedule_id }}";
+    let journey_date = "{{ date }}";
+    
+    console.log("Student ID:", student_id);
+    console.log("Bus ID:", bus_id);
+    console.log("Bus Schedule ID:", bus_schedule_id);
+    console.log("Journey Date:", journey_date);
 
-console.log("Student ID:", student_id);
-console.log("Bus ID:", bus_id);
+    let availableSeatsSet = new Set();
+    let selectedSeatNumber = null;
+    
 
-fetch(`/get_available_seats?bus_id=${bus_id}`)
-.then(res => res.json())
-.then(data => {
+    function fetchAvailableSeats() {
+        let url = `/get_available_seats?bus_id=${encodeURIComponent(bus_id)}`;
+        if (bus_schedule_id) {
+            url += `&bus_schedule_id=${encodeURIComponent(bus_schedule_id)}`;
+        }
+        if (journey_date && journey_date !== "") {
+            url += `&journey_date=${encodeURIComponent(journey_date)}`;
+        }
 
-    let available = new Set(data.map(s => s.seat_number));
-
-    let html = "";
-
-    for (let i = 1; i <= 40; i++) {
-
-        if (available.has(i)) {
-            html += `<div class="seat" onclick="selectSeat(${i}, this)">
-                        ${i}
-                     </div>`;
+        const seatGrid = document.getElementById("seatGrid");
+        seatGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem;"><i class="fas fa-spinner fa-pulse"></i> Loading seat map...</div>`;
+        
+        fetch(url)
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+        })
+        .then(data => {
+            let availableNumbers = new Set();
+            
+            if (Array.isArray(data)) {
+                if (data.length > 0 && typeof data[0] === 'object' && 'seat_number' in data[0]) {
+                    data.forEach(item => {
+                        if (item.is_available === true || item.is_available === undefined) {
+                            if (item.is_available !== false) {
+                                availableNumbers.add(item.seat_number);
+                            }
+                        } else if (item.is_available === false) {
+                        } else {
+                            availableNumbers.add(item.seat_number);
+                        }
+                    });
+                } else {
+                    data.forEach(num => {
+                        if (typeof num === 'number') availableNumbers.add(num);
+                    });
+                }
+            } else if (data && typeof data === 'object') {
+                if (data.available_seats && Array.isArray(data.available_seats)) {
+                    data.available_seats.forEach(num => availableNumbers.add(num));
+                } else {
+                    console.warn("Unexpected response format", data);
+                }
+            }
+            
+            availableSeatsSet = availableNumbers;
+            renderSeatGrid();
+        })
+        .catch(err => {
+            console.error("Failed to load seat availability:", err);
+            document.getElementById("seatGrid").innerHTML = `
+                <div style="grid-column:1/-1; text-align:center; padding:2rem; color:#b91c1c;">
+                    <i class="fas fa-exclamation-triangle"></i> Unable to load seat data. Please refresh or contact support.
+                    <br><small>Error: ${err.message}</small>
+                </div>
+            `;
+        });
+    }
+    
+    function renderSeatGrid() {
+        const seatGrid = document.getElementById("seatGrid");
+        let html = "";
+        
+        for (let i = 1; i <= 40; i++) {
+            const isAvailable = availableSeatsSet.has(i);
+            if (isAvailable) {
+                html += `<div class="seat available" data-seat="${i}" onclick="selectSeat(${i}, this)">
+                            ${i}
+                         </div>`;
+            } else {
+                html += `<div class="seat unavailable" data-seat="${i}" onclick="void(0)" style="cursor:not-allowed;">
+                            ${i}
+                         </div>`;
+            }
+        }
+        seatGrid.innerHTML = html;
+        
+        if (selectedSeatNumber && availableSeatsSet.has(selectedSeatNumber)) {
+            const selectedDiv = document.querySelector(`.seat.available[data-seat="${selectedSeatNumber}"]`);
+            if (selectedDiv) {
+                selectedDiv.classList.add("selected");
+                document.getElementById("seatInput").value = selectedSeatNumber;
+            } else {
+                selectedSeatNumber = null;
+                document.getElementById("seatInput").value = "";
+            }
         } else {
-            html += `<div class="seat">
-                        ${i}
-                     </div>`;
+            selectedSeatNumber = null;
+            document.getElementById("seatInput").value = "";
         }
     }
+    
 
-    document.getElementById("seatGrid").innerHTML = html;
-});
+    function selectSeat(seat_id, element) {
+        if (!availableSeatsSet.has(seat_id)) {
+            return;
+        }
+        
+        document.querySelectorAll(".seat.available").forEach(seat => {
+            seat.classList.remove("selected");
+        });
+        
 
-function selectSeat(seat_id, el) {
+        element.classList.add("selected");
+        selectedSeatNumber = seat_id;
+        
+        document.getElementById("seatInput").value = seat_id;
+        
+        
+        console.log("Selected seat:", seat_id);
+        console.log("Student ID:", student_id);
+        console.log("Bus Schedule ID:", bus_schedule_id);
+    }
+    
 
-    document.querySelectorAll(".seat").forEach(s => {
-        s.classList.remove("selected");
+    function validateForm() {
+        let seat = document.getElementById("seatInput").value;
+        if (!seat) {
+            return false;
+        }
+        
+        const seatNum = parseInt(seat, 10);
+        if (!availableSeatsSet.has(seatNum)) {
+            fetchAvailableSeats();
+            return false;
+        }
+        
+        const btn = document.querySelector("button[type='submit']");
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Processing...';
+            btn.disabled = true;
+            setTimeout(() => {
+            }, 3000);
+        }
+        return true;
+    }
+    
+
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const studentSpan = document.getElementById("studentDisplay");
+        if (studentSpan && student_id) {
+            studentSpan.textContent = student_id;
+        }
+        
+        fetchAvailableSeats();
+        
+        if (!bus_id || bus_id === "") {
+        }
+        if (!bus_schedule_id || bus_schedule_id === "") {
+            console.warn("Bus schedule ID not provided");
+        }
     });
+    
+    window.selectSeat = selectSeat;
+    window.validateForm = validateForm;
 
-    el.classList.add("selected");
-
-    document.getElementById("seatInput").value = seat_id;
-
-    console.log("student_id:", student_id);
-    console.log("bus_schedule_id:", "{{ bus_schedule_id }}");
-    console.log("seat_id:", seat_id);
-}
-
-function validateForm() {
-
-    let seat = document.getElementById("seatInput").value;
-
-    if (!seat) {
-        alert("Please select a seat first!");
-        return false;
+    function refreshSeatMap() {
+        fetchAvailableSeats();
+        showToast("Refreshing seat availability...", "#0a2d50");
+    }
+    
+    const legendDiv = document.querySelector('.legend');
+    if (legendDiv) {
+        const refreshBtn = document.createElement('span');
+        refreshBtn.style.cursor = "pointer";
+        refreshBtn.style.marginLeft = "auto";
+        refreshBtn.style.background = "#e2e8f0";
+        refreshBtn.style.padding = "4px 12px";
+        refreshBtn.style.borderRadius = "30px";
+        refreshBtn.style.fontSize = "0.7rem";
+        refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh seats';
+        refreshBtn.onclick = () => refreshSeatMap();
+        legendDiv.appendChild(refreshBtn);
     }
 
-    return true;
-}
-
+    function checkNoSeats() {
+        setTimeout(() => {
+            if (availableSeatsSet.size === 0 && document.querySelectorAll('.seat.available').length === 0 && document.getElementById('seatGrid').innerHTML.includes('seat')) {
+                const gridDiv = document.getElementById('seatGrid');
+                if (gridDiv && !gridDiv.innerHTML.includes('Unable to load')) {
+                    const noSeatMsg = document.createElement('div');
+                    noSeatMsg.style.gridColumn = "1/-1";
+                    noSeatMsg.style.textAlign = "center";
+                    noSeatMsg.style.padding = "1rem";
+                    noSeatMsg.style.color = "#b91c1c";
+                    noSeatMsg.innerHTML = '<i class="fas fa-ban"></i> All seats are booked for this trip. Please choose another schedule.';
+                    if (!gridDiv.querySelector('.no-seat-msg')) {
+                        noSeatMsg.classList.add('no-seat-msg');
+                        gridDiv.appendChild(noSeatMsg);
+                    }
+                }
+            }
+        }, 500);
+    }
+    
+    const observer = new MutationObserver(() => {
+        if (availableSeatsSet.size === 0 && document.querySelectorAll('.seat.available').length === 0) {
+            const grid = document.getElementById('seatGrid');
+            if (grid && !grid.querySelector('.full-book-msg')) {
+                const msg = document.createElement('div');
+                msg.className = 'full-book-msg';
+                msg.style.gridColumn = "1/-1";
+                msg.style.textAlign = "center";
+                msg.style.padding = "1rem";
+                msg.style.background = "#fee2e2";
+                msg.style.borderRadius = "1rem";
+                msg.innerHTML = '<i class="fas fa-exclamation-circle"></i> No seats available. All 40 seats are already booked.';
+                grid.appendChild(msg);
+            }
+        }
+    });
+    observer.observe(document.getElementById('seatGrid'), { childList: true, subtree: false });
 </script>
 
 </body>
 </html>
+```

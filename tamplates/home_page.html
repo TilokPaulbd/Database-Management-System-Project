@@ -2,19 +2,635 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>DIU Smart Transport | Next-Gen Campus Mobility</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f4f9 0%, #e2e8f2 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            padding: 2rem;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(10, 45, 80, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10, 45, 80, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .home-container {
+            max-width: 1300px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(2px);
+            border-radius: 48px;
+            box-shadow: 0 35px 65px -20px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .main-content {
+            padding: 3rem 2.5rem 2rem;
+            text-align: center;
+        }
+
+        .big-logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .big-title {
+            font-size: 52px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0a2d50 0%, #1b6b4c 50%, #e68a2e 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin: 0 0 30px 0;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .big-bus-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fff8f0, #ffffff);
+            border-radius: 80px;
+            padding: 1.2rem 2rem;
+            gap: 1.2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 180, 71, 0.3);
+            transition: transform 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .big-bus-logo:hover {
+            transform: translateY(-5px);
+        }
+
+        .big-bus-svg {
+            width: 90px;
+            height: 90px;
+        }
+
+        .big-bus-svg svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .feature-strip {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0 1.8rem;
+        }
+
+        .desc-badge {
+            background: #eef3f7;
+            border-radius: 40px;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1f6e6b;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .desc-badge i {
+            color: #ffb347;
+            font-size: 0.85rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0 1.8rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 60px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: none;
+            letter-spacing: 0.3px;
+            background-origin: border-box;
+        }
+
+        .btn-login {
+            background: linear-gradient(105deg, #1e6f8c, #0f546e);
+            color: white;
+            box-shadow: 0 8px 20px rgba(30, 111, 140, 0.3);
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(105deg, #0f5b74, #0a4459);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 28px rgba(30, 111, 140, 0.4);
+        }
+
+        .btn-signup {
+            background: linear-gradient(105deg, #2b7a4b, #1f5e3a);
+            color: white;
+            box-shadow: 0 8px 20px rgba(43, 122, 75, 0.3);
+        }
+
+        .btn-signup:hover {
+            background: linear-gradient(105deg, #1f643e, #164f31);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 28px rgba(43, 122, 75, 0.4);
+        }
+
+        .btn-admin {
+            background: linear-gradient(105deg, #5e3c8c, #422c66);
+            color: white;
+            box-shadow: 0 8px 20px rgba(94, 60, 140, 0.3);
+        }
+
+        .btn-admin:hover {
+            background: linear-gradient(105deg, #4c3074, #362254);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 28px rgba(94, 60, 140, 0.4);
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+        }
+
+        .description-section {
+            background: linear-gradient(105deg, #fefbf5, #ffffff);
+            border-radius: 32px;
+            margin: 1rem 2rem 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 180, 71, 0.2);
+        }
+
+        .desc-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .desc-text {
+            flex: 1.2;
+            padding: 2rem 2rem 2rem 2.5rem;
+        }
+
+        .desc-text h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(125deg, #134e5e, #1e7a5c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .desc-text p {
+            color: #2c4a5e;
+            line-height: 1.55;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .desc-photo {
+            flex: 0.9;
+            padding: 1.5rem;
+        }
+
+        .desc-photo img {
+            width: 100%;
+            border-radius: 28px;
+            object-fit: cover;
+            aspect-ratio: 16/10;
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .desc-photo img:hover {
+            transform: scale(1.02);
+        }
+
+        .gallery-section {
+            margin: 1rem 2rem 1.5rem;
+        }
+
+        .gallery-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #154e5e;
+            padding-left: 0.5rem;
+        }
+
+        .photo-strip {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.2rem;
+        }
+
+        .photo-item {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .photo-item img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+            background: #eef2f5;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.03);
+        }
+
+        .photo-label {
+            padding: 0.7rem 0.5rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            background: #ffffffdd;
+            color: #1b5e55;
+            border-top: 1px solid #eaf6f0;
+            letter-spacing: 0.2px;
+        }
+
+        .footer {
+            background: #f8fafc;
+            padding: 1.5rem 2.5rem;
+            text-align: center;
+            border-top: 1px solid #eef2f8;
+        }
+
+        .footer p {
+            color: #6c7f9b;
+            font-size: 0.75rem;
+        }
+
+        .footer i {
+            color: #ffb347;
+        }
+
+        
+    
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .photo-strip {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .desc-wrapper {
+                flex-direction: column;
+            }
+            .desc-text {
+                padding: 1.5rem;
+            }
+            .desc-photo {
+                padding: 0 1.5rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 850px) {
+            body {
+                padding: 1rem;
+            }
+            .big-title {
+                font-size: 32px;
+            }
+            .main-content {
+                padding: 2rem 1.5rem;
+            }
+            .photo-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .big-bus-logo {
+                padding: 0.8rem 1.5rem;
+            }
+            .big-bus-svg {
+                width: 60px;
+                height: 60px;
+            }
+            .description-section {
+                margin: 1rem;
+            }
+            .gallery-section {
+                margin: 1rem;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .photo-strip {
+                grid-template-columns: 1fr;
+            }
+            .action-buttons {
+                gap: 1rem;
+            }
+            .btn {
+                padding: 0.7rem 1.4rem;
+                font-size: 0.9rem;
+            }
+            .desc-text h3 {
+                font-size: 1.3rem;
+            }
+            .big-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
 <body>
 
-<div class="box">
-    <h1>DIU SMART TRANSPORT SYSTEM</h1>
+</head>
+<body>
 
-    <a href="/login" class="login">Login</a>
-    <a href="/signup" class="signup">Signup</a>
-    <a href="/admin_login" class="admin">Admin</a>
+<div class="home-container">
+    <div class="hero-card">
+        <div class="main-content">
+            <!-- LOGO   -->
+            <div class="big-logo-section">
+                <!-- title  -->
+                <h1 class="big-title">SMART DIU TRANSPORT SYSTEM</h1>
+                
+                <!-- Logo  -->
+                <div class="big-bus-logo">
+                    <div class="big-bus-svg">
+                        <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="10" y="38" width="100" height="54" rx="14" fill="#FFB347" stroke="#D97A0C" stroke-width="2.5"/>
+                            <rect x="5" y="30" width="110" height="12" rx="8" fill="#2E7A5C" stroke="#1E5942" stroke-width="1.8"/>
+                            <rect x="20" y="50" width="22" height="20" rx="5" fill="#2C3E50" />
+                            <rect x="49" y="50" width="22" height="20" rx="5" fill="#2C3E50" />
+                            <rect x="78" y="50" width="22" height="20" rx="5" fill="#2C3E50" />
+                            <circle cx="32" cy="94" r="12" fill="#1E1E1E" stroke="#F0F0F0" stroke-width="2.5"/>
+                            <circle cx="88" cy="94" r="12" fill="#1E1E1E" stroke="#F0F0F0" stroke-width="2.5"/>
+                            <circle cx="32" cy="94" r="5" fill="#B0B0B0" />
+                            <circle cx="88" cy="94" r="5" fill="#B0B0B0" />
+                            <path d="M104 52 L112 52 L112 86 L104 86 Z" fill="#E68A2E" />
+                            <rect x="44" y="82" width="32" height="8" rx="4" fill="#1F5E3A" />
+                            <circle cx="64" cy="26" r="7" fill="#F4C542" stroke="#B4621A" stroke-width="1.8" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+           
+            <div class="feature-strip">
+                <span class="desc-badge"><i class="fas fa-bus"></i> Smart Seat Booking</span>
+                <span class="desc-badge"><i class="fas fa-calendar-alt"></i> Schedule Viewing</span>
+                <span class="desc-badge"><i class="fas fa-chair"></i> Real-time Seat Availability</span>
+                <span class="desc-badge"><i class="fas fa-database"></i> Database Integrated System</span>
+                <span class="desc-badge"><i class="fas fa-cogs"></i> Automated Management</span>
+                <span class="desc-badge"><i class="fas fa-user-shield"></i> Admin Control Panel</span>
+                <span class="desc-badge"><i class="fas fa-tachometer-alt"></i> Efficient & Fast System</span>
+                <span class="desc-badge"><i class="fas fa-desktop"></i> Clean User Interface</span>
+            </div>
+
+           
+            <div class="action-buttons">
+                <a href="/login" class="btn btn-login" id="loginBtn">
+                    <i class="fas fa-key"></i> Login
+                </a>
+                <a href="/signup" class="btn btn-signup" id="signupBtn">
+                    <i class="fas fa-user-plus"></i> Signup
+                </a>
+                <a href="/admin_login" class="btn btn-admin" id="adminBtn">
+                    <i class="fas fa-shield-alt"></i> Admin
+                </a>
+            </div>
+        </div>
+
+     
+        <div class="description-section">
+            <div class="desc-wrapper">
+                <div class="desc-text">
+                    <h3><i class="fas fa-bus-alt" style="color: #ffb347;"></i> About our project</h3>
+                    <p>The DIU Smart Transport System is an intelligent, web-based platform designed to modernize and simplify university transportation management. It allows students to easily book bus seats, view schedules, and track availability in real time. The system ensures efficient seat allocation, reduces manual workload, and enhances user convenience through a clean interface.</p>
+                    <p>This project, developed for our Database Management System course, demonstrates the use of database integration and automation to improve transport management.</p>
+                </div>
+                
+                <div class="desc-photo">
+                    <img class="gallery-img" src="{{ url_for('static', filename='image/schema.png') }}" alt="Electric bus fleet" loading="lazy">
+                </div>
+            </div>
+        </div>
+
+        <!-- 5 PHOTOS -->
+        <div class="gallery-section">
+            <div class="gallery-title">
+                <i class="fas fa-users" style="color: #e68a2e;"></i> 
+                <span>Meet the Team</span>
+            </div>
+            <div class="photo-strip" id="photoStrip">
+                <div class="photo-item" data-label="Smart electric fleet">
+                    <img class="gallery-img" src="{{ url_for('static', filename='image/IMG_6483.jpeg') }}" alt="Electric bus fleet" loading="lazy">
+                    <div class="photo-label"><i class="fas fa-graduation-cap"></i> Tilok Paul <br>   ID : 241-15-690</div>
+               </div>
+                 <div class="photo-item" data-label="Smart electric fleet">
+                    <img class="gallery-img" src="{{ url_for('static', filename='image/rishad.png') }}" alt="Electric bus fleet" loading="lazy">
+                    <div class="photo-label"><i class="fas fa-graduation-cap"></i> Risadul Islam <br>   ID : 241-15-166</div>
+               </div>
+                 <div class="photo-item" data-label="Smart electric fleet">
+                    <img class="gallery-img" src="{{ url_for('static', filename='image/sristy.png') }}" alt="Electric bus fleet" loading="lazy">
+                    <div class="photo-label"><i class="fas fa-graduation-cap"></i> Mst Razia Akter Sristy <br> ID : 241-15-089</div>
+               </div>
+                 <div class="photo-item" data-label="Smart electric fleet">
+                    <img class="gallery-img" src="{{ url_for('static', filename='image/Rimon.png') }}" alt="Electric bus fleet" loading="lazy">
+                    <div class="photo-label"><i class="fas fa-graduation-cap"></i> Md Jahidul Islam Rimon <br>  ID : 241-15-604</div>
+               </div>
+                 <div class="photo-item" data-label="Smart electric fleet">
+                    <img class="gallery-img" src="{{ url_for('static', filename='image/sifat.png') }}" alt="Electric bus fleet" loading="lazy">
+                    <div class="photo-label"><i class="fas fa-graduation-cap"></i> Md. Abdul Mueed Shah <br>    ID : 241-15-655</div>
+               </div>
+            </div>
+        </div>
+
+        
+        <div class="footer">
+            <p>&copy; Daffodil International University | Spring 2026 66_C2</p>
+        </div>
+    </div>
 </div>
 
+
+<div id="toastMsg" class="toast-notification">
+    <i class="fas fa-bus"></i> <span id="toastText">Ready</span>
+</div>
+
+<script>
+
+    
+    const loginButton = document.getElementById('loginBtn');
+    const signupButton = document.getElementById('signupBtn');
+    const adminButton = document.getElementById('adminBtn');
+
+    const toastEl = document.getElementById('toastMsg');
+    const toastTextSpan = document.getElementById('toastText');
+    
+    function showToast(message, type = 'info') {
+        if (!toastEl || !toastTextSpan) return;
+        toastTextSpan.innerText = message;
+        toastEl.classList.add('show');
+
+        const iconEl = toastEl.querySelector('i');
+        if (iconEl) {
+            if (type === 'success') iconEl.className = 'fas fa-check-circle';
+            else if (type === 'admin') iconEl.className = 'fas fa-shield-alt';
+            else iconEl.className = 'fas fa-bus';
+        }
+        setTimeout(() => {
+            toastEl.classList.remove('show');
+        }, 2200);
+    }
+    
+
+    function navigateTo(route, toastMsg, toastType = 'success') {
+        showToast(toastMsg, toastType);
+        setTimeout(() => {
+            window.location.href = route;
+        }, 500);
+    }
+    
+   
+    if (loginButton) {
+        loginButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            navigateTo('/login', '', 'success');
+        });
+    } else {
+        console.warn("Login button not found");
+    }
+    
+    if (signupButton) {
+        signupButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            navigateTo('/signup', '', 'success');
+        });
+    }
+    
+    if (adminButton) {
+        adminButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            navigateTo('/admin_login', '', 'admin');
+        });
+    }
+    
+    const photoItems = document.querySelectorAll('.photo-item');
+    photoItems.forEach((item) => {
+        item.addEventListener('click', (e) => {
+            const labelElem = item.querySelector('.photo-label');
+            let personName = item.getAttribute('data-name') || 'Team Member';
+            let idText = labelElem ? labelElem.innerText.replace(/\n/g, ' ').trim() : personName;
+            showToast(`📸 ${idText} • DIU Transport Team`, 'info');
+        });
+    });
+
+    const allImages = document.querySelectorAll('.gallery-img');
+    allImages.forEach(img => {
+        img.addEventListener('error', function() {
+            if (!this.dataset.fallbackSet) {
+                this.dataset.fallbackSet = 'true';
+                let fallbackText = "DIU Smart Transport";
+                if (this.closest('.photo-item')) {
+                    const nameDiv = this.closest('.photo-item')?.querySelector('.photo-label')?.innerText;
+                    if (nameDiv) fallbackText = nameDiv.substring(0, 30);
+                }
+                this.src = `https://placehold.co/600x450/1f6e5c/white?text=${encodeURIComponent(fallbackText || 'DIU Bus')}`;
+            }
+        });
+        if (!img.complete || img.naturalWidth === 0) {
+            if (img.src && !img.src.includes('placehold.co')) {
+                img.src = img.src; 
+            }
+        }
+    });
+
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('touchstart', function(e) {
+        });
+    });
+    console.log("DIU Smart Transport - All buttons functional with redirection logic.");
+</script>
 </body>
 </html>

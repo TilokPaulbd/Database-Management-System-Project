@@ -1,31 +1,614 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Signup</title>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIU Smart Transport | Student Signup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f4f9 0%, #e2e8f2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 2rem;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(10, 45, 80, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10, 45, 80, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .signup-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 25px 55px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            min-height: 620px;
+            transition: all 0.3s ease;
+        }
+
+        .brand-section {
+            flex: 1.1;
+            background: linear-gradient(135deg, #0a2d50 0%, #0f3b5e 50%, #124a6e 100%);
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-section::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -20%;
+            width: 280px;
+            height: 280px;
+            background: rgba(255, 180, 71, 0.08);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .brand-section::after {
+            content: '';
+            position: absolute;
+            bottom: -15%;
+            left: -15%;
+            width: 320px;
+            height: 320px;
+            background: rgba(255, 180, 71, 0.05);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .brand-header {
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .brand-logo i {
+            font-size: 2.2rem;
+            color: #ffb347;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 18px;
+        }
+
+        .brand-logo h1 {
+            color: white;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-tagline {
+            margin-top: 2rem;
+        }
+
+        .brand-tagline h2 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .brand-tagline p {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            max-width: 90%;
+        }
+
+        .features-list {
+            margin-top: 2rem;
+            list-style: none;
+        }
+
+        .features-list li {
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        .features-list li i {
+            color: #ffb347;
+            font-size: 0.9rem;
+            width: 22px;
+        }
+
+        .brand-footer {
+            position: relative;
+            z-index: 2;
+            margin-top: 2rem;
+        }
+
+        .brand-footer small {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.7rem;
+        }
+
+
+        .signup-section {
+            flex: 0.9;
+            background: white;
+            padding: 2.5rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+            max-height: 700px;
+        }
+
+        .signup-section::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .signup-section::-webkit-scrollbar-track {
+            background: #eef2f7;
+            border-radius: 10px;
+        }
+
+        .signup-section::-webkit-scrollbar-thumb {
+            background: #ffb347;
+            border-radius: 10px;
+        }
+
+        .signup-header {
+            margin-bottom: 1.8rem;
+        }
+
+        .signup-header h2 {
+            color: #0a2d50;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .signup-header h2 i {
+            color: #ffb347;
+            font-size: 1.6rem;
+        }
+
+        .signup-header p {
+            color: #5e6f8d;
+            font-size: 0.85rem;
+        }
+
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #1e2f3e;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.3px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            color: #9aa9bb;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            background: #fafcff;
+            color: #1a2c3e;
+            font-weight: 500;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #ffb347;
+            box-shadow: 0 0 0 3px rgba(255, 180, 71, 0.15);
+            background: white;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #b9c3d0;
+            font-weight: 400;
+            font-size: 0.85rem;
+        }
+
+    
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9aa9bb;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: #ffb347;
+        }
+
+        .field-hint {
+            font-size: 0.65rem;
+            color: #7b8ba3;
+            margin-top: 0.3rem;
+            margin-left: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .field-hint i {
+            font-size: 0.55rem;
+            color: #ffb347;
+        }
+
+        .signup-btn {
+            width: 100%;
+            background: linear-gradient(100deg, #ffb347, #ff9a2e);
+            border: none;
+            padding: 0.9rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #1e2a3a;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 0.8rem;
+            box-shadow: 0 4px 12px rgba(255, 180, 71, 0.3);
+        }
+
+        .signup-btn i {
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+
+        .signup-btn:hover {
+            background: linear-gradient(100deg, #ffaa33, #ff8c1a);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(255, 140, 26, 0.35);
+        }
+
+        .signup-btn:hover i {
+            transform: translateX(4px);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eef2f8;
+        }
+
+        .form-footer a {
+            color: #ff9a2e;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-footer a:hover {
+            color: #0a2d50;
+            text-decoration: underline;
+        }
+
+        .form-footer small {
+            color: #8c9bb0;
+            font-size: 0.65rem;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+    
+        .toast-notify {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1f2d3d;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 500;
+            z-index: 1100;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            backdrop-filter: blur(8px);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            animation: fadeInRight 0.3s ease;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toast-success {
+            background: #2b7a3e;
+            border-left: 4px solid #ffb347;
+        }
+
+        .toast-error {
+            background: #b91c1c;
+            border-left: 4px solid #ffb347;
+        }
+
+      
+        .input-wrapper input.error-input {
+            border-color: #e53e3e;
+            background-color: #fff5f5;
+        }
+
+       
+        @media (max-width: 950px) {
+            body {
+                padding: 1rem;
+            }
+            .signup-wrapper {
+                flex-direction: column;
+                max-width: 550px;
+                margin: 0;
+            }
+            .brand-section {
+                padding: 2rem;
+            }
+            .brand-tagline h2 {
+                font-size: 1.6rem;
+            }
+            .signup-section {
+                padding: 2rem;
+                max-height: none;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .signup-wrapper {
+                max-width: 1400px;
+            }
+            .brand-section {
+                padding: 3.5rem;
+            }
+            .signup-section {
+                padding: 3rem;
+            }
+        }
+    </style>
+</head>
 <body>
 
-<div class="container">
-    <h2>Student Signup</h2>
+<div class="signup-wrapper">
+    <!-- Left side -->
+    <div class="brand-section">
+        <div class="brand-header">
+            <div class="brand-logo">
+                <i class="fas fa-bus-alt"></i>
+                <h1>Smart DIU Transport System</h1>
+            </div>
+            <div class="brand-tagline">
+                <h2>Join the<br>Smart Transport</h2>
+                <p>Create your account to enjoy seamless digital seat booking and a smooth, hassle-free travel experience with easy reservations and maximum convenience.</p>
+            </div>
+            <ul class="features-list">
+                <li><i class="fas fa-check-circle"></i> Smart schedule management</li>
+                <li><i class="fas fa-check-circle"></i> Digital seat booking</li>
+                <li><i class="fas fa-check-circle"></i> Secure & paperless system</li>
+                <li><i class="fas fa-check-circle"></i> Automated seat allocation</li>
+            </ul>
+        </div>
+        <div class="brand-footer">
+            <small>© Daffodil International University | Spring 2026 66_C2</small>
+        </div>
+    </div>
 
-    <form action="/signup" method="POST">
+    <!-- Right side -->
+    <div class="signup-section">
+        <div class="signup-header">
+            <h2><i class="fas fa-user-plus"></i> Student Signup</h2>
+            <p>Fill in your details to create an account</p>
+        </div>
 
-        <input type="text" name="student_id" placeholder="Student ID" required>
+        <form id="signupForm" method="POST" action="/signup">
+            <!-- Student ID  -->
+            <div class="form-group">
+                <label><i class="fas fa-id-card" style="margin-right: 6px;"></i> Student ID</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-graduation-cap"></i>
+                    <input type="text" 
+                           id="studentId" 
+                           name="student_id" 
+                           placeholder="XXX-XXX-XXX" 
+                           required
+                           autocomplete="off">
+                </div>
+              
+            </div>
 
-        <input type="text" name="student_name" placeholder="Full Name" required>
+            <!-- Student Name -->
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Full Name</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user-pen"></i>
+                    <input type="text" 
+                           id="studentName" 
+                           name="student_name" 
+                           placeholder="TILOK PAUL" 
+                           required
+                           autocomplete="off">
+                </div>
+                
+            </div>
 
-        <input type="email" name="email" placeholder="Email" required>
+            <!-- Email-->
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-at"></i>
+                    <input type="email" 
+                           id="email" 
+                           name="email" 
+                           placeholder="XXXXXXXXX@diu.edu" 
+                           required
+                           autocomplete="off">
+                </div>
+              
+            </div>
 
-        <input type="number" name="phone" placeholder="Phone Number" required>
+            <!-- Phone Number -->
+            <div class="form-group">
+                <label><i class="fas fa-phone-alt"></i> Phone Number</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-mobile-alt"></i>
+                    <input type="tel" 
+                           id="phone" 
+                           name="phone" 
+                           placeholder="017XXXXXXXX" 
+                           required
+                           autocomplete="off">
+                </div>
+              
+            </div>
 
-        <input type="password" name="password" placeholder="Password" required>
+            <!-- Password Field  -->
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <div class="input-wrapper password-wrapper">
+                    <i class="fas fa-key"></i>
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           placeholder="Create a strong password" 
+                           required>
+                    <button type="button" class="toggle-password" id="togglePasswordBtn">
+                        <i class="fas fa-eye-slash"></i>
+                    </button>
+                </div>
+               
+            </div>
 
-        <button type="submit">Sign Up</button>
+            <!-- Sign Up Button -->
+            <button type="submit" class="signup-btn" id="signupBtn">
+                <span>Create Account</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
 
-    </form>
+       
+        </form>
+    </div>
 </div>
 
+<script>
+
+
+  
+    toggleBtn.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        const icon = toggleBtn.querySelector('i');
+        if (type === 'text') {
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        } else {
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+    });
+
+   
+
+
+    studentIdInput.placeholder = "XXX-XXX-XXX";
+    studentNameInput.placeholder = "XXXX XXX";
+    emailInput.placeholder = "XXXXXX@diu.edu";
+    phoneInput.placeholder = "017XXXXXXXX";
+</script>
 </body>
 </html>
+```
