@@ -1,113 +1,449 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Booking</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>DIU Smart Transport | Travel Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f4fa 0%, #d9e2ef 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            background: #0a2d50;
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .navbar h2 {
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar h2 i {
+            background: #ffb347;
+            padding: 8px;
+            border-radius: 50%;
+            color: #0a2d50;
+        }
+
+        .navbar a {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1.3rem;
+            border-radius: 2rem;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .navbar a:hover {
+            background: #ffb347;
+            color: #0a2d50;
+        }
+
+        /* card style */
+        .card {
+            background: white;
+            border-radius: 1.8rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: #1e2a3e;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 5px solid #ffb347;
+            padding-left: 1rem;
+        }
+
+        .date-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .date-group input {
+            flex: 2;
+            min-width: 220px;
+            padding: 0.85rem 1.2rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 3rem;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .date-group input:focus {
+            outline: none;
+            border-color: #ffb347;
+            box-shadow: 0 0 0 3px rgba(255,180,71,0.2);
+        }
+
+        button {
+            background: #0a2d50;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 3rem;
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #ffb347;
+            color: #0a2d50;
+            transform: scale(0.98);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 1.2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #0f2c3f;
+            color: white;
+            padding: 14px 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #eef2f8;
+            color: #1f2f3e;
+            font-size: 0.9rem;
+        }
+
+        tr:hover td {
+            background-color: #fff9ef;
+        }
+
+        .action-btn {
+            background: #ffb347;
+            color: #1e2a3a;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background: #ff9f1a;
+            transform: translateY(-2px);
+        }
+
+        .empty-row td {
+            text-align: center;
+            padding: 2rem;
+            color: #6c7e97;
+            font-style: italic;
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #1f2d3d;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            z-index: 1100;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-size: 0.9rem;
+        }
+
+        .toast-success {
+            background: #2b7a3e;
+        }
+
+        .toast-error {
+            background: #b91c1c;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #4a627a;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 1rem;
+            }
+            th, td {
+                font-size: 0.75rem;
+                padding: 8px 6px;
+            }
+            .action-btn {
+                padding: 0.3rem 0.8rem;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-
 <body>
-
 <div class="container">
 
-    
-    <div class="card">
-        <h3>Select Journey Date</h3>
+    <div class="navbar">
+        <h2><i class="fas fa-bus"></i> DIU Smart Transport System</h2>
 
-        <input type="date" id="date">
-        <button onclick="search()">Search</button>
     </div>
 
-   
     <div class="card">
-        <h3>Schedules</h3>
-
-        <table id="table">
-            <tr>
-                <th>Bus Schedule ID</th>
-                <th>Schedule ID</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Bus ID</th>
-                <th>Action</th>
-            </tr>
-        </table>
+        <h3><i class="fas fa-calendar-alt"></i> Select Journey Date</h3>
+        <div class="date-group">
+            <input type="date" id="journeyDate" required>
+            <button id="searchBtn" onclick="searchSchedules()">
+                <i class="fas fa-search"></i> Search Schedules
+            </button>
+        </div>
+       
     </div>
 
+    <div class="card">
+        <h3><i class="fas fa-route"></i> Available Bus Schedules</h3>
+        <div class="table-wrapper">
+            <table id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th>Bus Schedule ID</th>
+                        <th>Schedule ID</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Bus ID</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr class="empty-row">
+                        <td colspan="8">
+                            <i class="fas fa-clock"></i> Please select a date 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer>
+        <i class="fas fa-map-marked-alt"></i>  Daffodil International University | Spring 2026 66_C2
+    </footer>
 </div>
 
 <script>
-
-let student_id = "{{ student_id }}";
-
-function search() {
-
-    let date = document.getElementById("date").value;
-
-    if (!date) {
-        alert("Please select a date");
-        return;
-    }
-
-    fetch(`/get_schedules_by_date?date=${date}`)
-    .then(res => {
-        if (!res.ok) throw new Error("Server error");
-        return res.json();
-    })
-    .then(data => {
-
-        let table = document.getElementById("table");
-
-        table.innerHTML = `
-            <tr>
-                <th>Bus Schedule ID</th>
-                <th>Schedule ID</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Bus ID</th>
-                <th>Action</th>
-            </tr>
-        `;
-
-        if (!data || data.length === 0) {
-            table.innerHTML += `
-                <tr>
-                    <td colspan="8">No schedules found</td>
-                </tr>
-            `;
+    let student_id = "{{ student_id if student_id else '' }}";
+    function searchSchedules() {
+        const dateInput = document.getElementById("journeyDate");
+        const date = dateInput.value;
+        
+        if (!date) {
+            showToast(" Please select a journey date first", "#b85c00");
             return;
         }
 
-        data.forEach(s => {
-            table.innerHTML += `
-                <tr>
-                    <td>${s.bus_schedule_id}</td>
-                    <td>${s.schedule_id}</td>
-                    <td>${s.start_destination}</td>
-                    <td>${s.end_destination}</td>
-                    <td>${s.start_time}</td>
-                    <td>${s.end_time}</td>
-                    <td>${s.bus_id}</td>
-                    <td>
-                        <a href="/booking_seat?date=${date}&bus_schedule_id=${s.bus_schedule_id}&bus_id=${s.bus_id}&student_id=${student_id}">
-                            <button>Select</button>
-                        </a>
+        const tbody = document.getElementById("tableBody");
+        tbody.innerHTML = `
+            <tr class="empty-row">
+                <td colspan="8">
+                    <i class="fas fa-spinner fa-pulse"></i> Loading schedules...
+                </td>
+            </tr>
+        `;
+
+        fetch(`/get_schedules_by_date?date=${date}`)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`Server responded with status ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(data => {
+            tbody.innerHTML = "";
+            
+            if (!data || !Array.isArray(data) || data.length === 0) {
+                tbody.innerHTML = `
+                    <tr class="empty-row">
+                        <td colspan="8">
+                            <i class="fas fa-bus"></i> No schedules found for ${date}. Try another date.
+                        </td>
+                    </tr>
+                `;
+                showToast(`No schedules on ${date}`, "#6c7e97");
+                return;
+            }
+            data.forEach(schedule => {
+                const row = tbody.insertRow();
+                
+
+                const cellBusScheduleId = row.insertCell(0);
+                cellBusScheduleId.textContent = schedule.bus_schedule_id ?? '—';
+
+                const cellScheduleId = row.insertCell(1);
+                cellScheduleId.textContent = schedule.schedule_id ?? '—';
+
+                const cellFrom = row.insertCell(2);
+                cellFrom.textContent = schedule.start_destination ?? schedule.from ?? '—';
+                
+
+                const cellTo = row.insertCell(3);
+                cellTo.textContent = schedule.end_destination ?? schedule.to ?? '—';
+                
+
+                const cellStartTime = row.insertCell(4);
+                cellStartTime.textContent = schedule.start_time ?? '—';
+                
+
+                const cellEndTime = row.insertCell(5);
+                cellEndTime.textContent = schedule.end_time ?? '—';
+                
+
+                const cellBusId = row.insertCell(6);
+                cellBusId.textContent = schedule.bus_id ?? '—';
+
+                const cellAction = row.insertCell(7);
+                const selectLink = document.createElement('a');
+                const bookingUrl = `/booking_seat?date=${encodeURIComponent(date)}&bus_schedule_id=${encodeURIComponent(schedule.bus_schedule_id)}&bus_id=${encodeURIComponent(schedule.bus_id)}&student_id=${encodeURIComponent(student_id)}`;
+                selectLink.href = bookingUrl;
+                selectLink.className = 'action-btn';
+                selectLink.innerHTML = '<i class="fas fa-chair"></i> Select';
+                cellAction.appendChild(selectLink);
+            });
+      
+        })
+        .catch(err => {
+            console.error("Fetch error:", err);
+            tbody.innerHTML = `
+                <tr class="empty-row">
+                    <td colspan="8">
+                        <i class="fas fa-exclamation-triangle"></i> Failed to load schedules. Check backend connection.
                     </td>
                 </tr>
             `;
         });
+    }
+    
 
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Failed to load schedules");
+
+    
+
+    function setDefaultDate() {
+        const dateInput = document.getElementById("journeyDate");
+        if (!dateInput.value) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+        }
+    }
+
+    function bindEnterKey() {
+        const dateField = document.getElementById("journeyDate");
+        dateField.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                searchSchedules();
+            }
+        });
+    }
+    
+    function validateStudentId() {
+        if (!student_id || student_id === "") {
+            console.warn("Student ID not provided by backend template. Make sure Jinja2 passes student_id variable.");
+            const hintDiv = document.getElementById("dateHint");
+            if (hintDiv) {
+                hintDiv.innerHTML += `<br><span style="color:#c2410c;"><i class="fas fa-user-graduate"></i> Note: Student ID is required for booking. Ensure backend passes 'student_id'.</span>`;
+            }
+        } else {
+            const navbar = document.querySelector('.navbar h2');
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        setDefaultDate();
+        bindEnterKey();
+        validateStudentId();
+        if (student_id && student_id !== "") {
+            const studentBadge = document.createElement('div');
+            studentBadge.style.cssText = "background:#eef2ff; border-radius: 2rem; padding: 4px 12px; font-size:0.75rem; margin-left:auto; display:inline-block;";
+            studentBadge.innerHTML = `<i class="fas fa-id-card"></i> Student: ${student_id}`;
+            const navbarDiv = document.querySelector('.navbar');
+            if (navbarDiv && !document.querySelector('.student-badge')) {
+                const badgeSpan = document.createElement('span');
+                badgeSpan.className = 'student-badge';
+                badgeSpan.style.background = "#ffffff20";
+                badgeSpan.style.padding = "6px 14px";
+                badgeSpan.style.borderRadius = "40px";
+                badgeSpan.style.fontSize = "0.8rem";
+                badgeSpan.style.color = "white";
+                badgeSpan.innerHTML = `<i class="fas fa-user-check"></i> ${student_id}`;
+                navbarDiv.appendChild(badgeSpan);
+            }
+        }
     });
-}
 
+    window.searchSchedules = searchSchedules;
+
+    console.log("DIU Smart Transport | Booking interface ready.");
 </script>
-
 </body>
 </html>
+```

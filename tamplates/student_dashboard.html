@@ -1,113 +1,537 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Student Dashboard</title>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>DIU Smart Transport | Student Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+        }
 
+        body {
+            background: linear-gradient(135deg, #eef2f7 0%, #d9e2ef 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+    
+        .navbar {
+            background: #0a2d50;
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .navbar h2 {
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar h2 i {
+            background: #ffb347;
+            padding: 8px;
+            border-radius: 50%;
+            color: #0a2d50;
+        }
+
+        .navbar a {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 2rem;
+            transition: 0.2s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar a:hover {
+            background: #ffb347;
+            color: #0a2d50;
+            transform: translateY(-2px);
+        }
+
+    
+        .card, .table-card {
+            background: white;
+            border-radius: 1.8rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover, .table-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.12);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #1e2a3e;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 5px solid #ffb347;
+            padding-left: 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info {
+            background: #f8fafc;
+            padding: 0.8rem 1.2rem;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .info b {
+            color: #0a2d50;
+            margin-right: 8px;
+        }
+
+        .btn-primary {
+            background: #ffb347;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #1e2a3a;
+            margin-top: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: #ff9f1a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(255,180,71,0.3);
+        }
+
+        .denied-badge {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        /* warning card */
+        .warning {
+            background: linear-gradient(135deg, #fff3e0, #ffe4c4);
+            border-left: 8px solid #ffb347;
+            border-radius: 1.5rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px rgba(255,180,71,0.2);
+        }
+
+        .warning h3 {
+            border-left: none;
+            color: #b85c00;
+            padding-left: 0;
+        }
+
+        .warning p {
+            color: #8b3c00;
+            line-height: 1.5;
+        }
+
+     
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 1.2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #0f2c3f;
+            color: white;
+            padding: 14px 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #eef2f8;
+            color: #1f2f3e;
+            font-size: 0.85rem;
+        }
+
+        tr:hover td {
+            background-color: #fff9ef;
+        }
+
+        .status-confirmed {
+            background: #e0f2e9;
+            color: #0a6e3d;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: inline-block;
+        }
+
+        .status-denied {
+            background: #fee9e6;
+            color: #bc3900;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: #fff3e0;
+            color: #b85c00;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: inline-block;
+        }
+
+        .payment-success {
+            background: #e0f2e9;
+            color: #0a6e3d;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: inline-block;
+        }
+
+        .payment-pending {
+            background: #fff3e0;
+            color: #b85c00;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: inline-block;
+        }
+
+      
+        .filter-form {
+            background: #f8fafc;
+            padding: 1rem 1.5rem;
+            border-radius: 1.2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .filter-form label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #5c6f87;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .filter-form input {
+            padding: 0.7rem 1rem;
+            border-radius: 2rem;
+            border: 1.5px solid #e2e8f0;
+            font-size: 0.9rem;
+            width: 180px;
+        }
+
+        .filter-form input:focus {
+            outline: none;
+            border-color: #ffb347;
+        }
+
+        .filter-form button {
+            background: #0a2d50;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 2rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .filter-form button:hover {
+            background: #ffb347;
+            color: #1e2a3a;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 2rem;
+            color: #6c7e97;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            color: #5a6e85;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 1rem;
+            }
+            .card, .table-card {
+                padding: 1.2rem;
+            }
+            th, td {
+                font-size: 0.75rem;
+                padding: 8px 6px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
 <body>
 
-
-<div class="navbar">
-    <h2>Student Dashboard</h2>
-    <a href="/logout" class="logout">Logout</a>
-</div>
-
-
 <div class="container">
-    <div class="card">
-        <h3>Student Info</h3>
 
-        <div class="info"><b>ID:</b> {{ student_id }}</div>
-        <div class="info"><b>Name:</b> {{ student_name }}</div>
-        <div class="info"><b>Email:</b> {{ email }}</div>
-        <div class="info"><b>Phone:</b> {{ phone }}</div>
-
-        <a href="/booking_page?student_id={{ student_id }}">
-            <button type="button">Book Seat</button>
-        </a>
-
-        <p><b>Denied Count:</b> {{ denied_count }}</p>
+    <div class="navbar">
+        <h2><i class="fas fa-bus"></i> Smart DIU Transport System  |  Student Dashboard</h2>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
+
+    <!-- Student -->
+    <div class="card">
+        <h3><i class="fas fa-user-graduate"></i> Student Information</h3>
+        <div class="info-grid">
+            <div class="info"><b><i class="fas fa-id-card"></i> Student ID:</b> {{ student_id }}</div>
+            <div class="info"><b><i class="fas fa-user"></i> Full Name:</b> {{ student_name }}</div>
+            <div class="info"><b><i class="fas fa-envelope"></i> Email:</b> {{ email }}</div>
+            <div class="info"><b><i class="fas fa-phone"></i> Phone:</b> {{ phone }}</div>
+        </div>
+        
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
+            <a href="/booking_page?student_id={{ student_id }}">
+                <button type="button" class="btn-primary">
+                    <i class="fas fa-chair"></i> Book New Seat
+                </button>
+            </a>
+            <div class="denied-badge">
+                <i class="fas fa-exclamation-triangle"></i> Denied Travel Count: <strong>{{ denied_count }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning -->
+    {% if denied_count > 5 %}
+    <div class="warning">
+        <h3><i class="fas fa-exclamation-circle"></i> ⚠ WARNING</h3>
+        <p>
+            Your denied travel count is <strong>{{ denied_count }}</strong>.<br>
+            This is above the safe limit (5). Please contruct with Tilok Paul to avoid further issues. 
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- Travel History  -->
+    <div class="table-card">
+        <h3><i class="fas fa-history"></i> Travel History</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Log ID</th>
+                        <th>Booking ID</th>
+                        <th>Schedule</th>
+                        <th>Seat</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in logs %}
+                    <tr>
+                        <td>{{ l[0] }}</td>
+                        <td>{{ l[1] }}</td>
+                        <td>{{ l[3] }}</td>
+                        <td><strong>{{ l[4] }}</strong></td>
+                        <td>{{ l[5] }}</td>
+                        <td>{{ l[6] }}</td>
+                        <td>
+                            {% set status = l[7] %}
+                            {% if status == 'CONFIRMED' %}
+                                <span class="status-confirmed"><i class="fas fa-check-circle"></i> CONFIRMED</span>
+                            {% elif status == 'DENIED' %}
+                                <span class="status-denied"><i class="fas fa-ban"></i> DENIED</span>
+                            {% else %}
+                                <span class="status-pending"><i class="fas fa-clock"></i> {{ status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ l[8] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="empty-message">
+                            <i class="fas fa-bus"></i> No travel history found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Payment History -->
+    <div class="table-card">
+        <h3><i class="fas fa-credit-card"></i> Payment History</h3>
+        
+        <form method="GET" action="/student_dashboard" class="filter-form">
+            <input type="hidden" name="student_id" value="{{ student_id }}">
+            <div>
+                <label><i class="fas fa-calendar-alt"></i> Semester ID</label>
+                <input type="number" name="semester_id" value="{{ semester_id }}" placeholder="e.g., 1, 2, 3..." min="1">
+            </div>
+            <button type="submit"><i class="fas fa-search"></i> Search Payment</button>
+        </form>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Student ID</th>
+                        <th>Semester ID</th>
+                        <th>Amount (BDT)</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                    <tr>
+                        <td>{{ p[0] }}</td>
+                        <td>{{ p[1] }}</td>
+                        <td>{{ p[2] }}</td>
+                        <td><strong>৳{{ p[3] }}</strong></td>
+                        <td>
+                            {% set pay_status = p[4] %}
+                            {% if pay_status == 'PAID' or pay_status == 'SUCCESS' %}
+                                <span class="payment-success"><i class="fas fa-check-circle"></i> PAID</span>
+                            {% elif pay_status == 'PENDING' %}
+                                <span class="payment-pending"><i class="fas fa-clock"></i> PENDING</span>
+                            {% else %}
+                                <span class="status-denied">{{ pay_status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ p[5] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="empty-message">
+                            <i class="fas fa-receipt"></i> No payment records found for semester {{ semester_id if semester_id else '—' }}.
+                            {% if not semester_id %}Try searching with a Semester ID.{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <i class="fas fa-map-marked-alt"></i> Daffodil International University | Spring 2026 66_C2
+    </footer>
 </div>
 
-
-{% if denied_count > 10 %}
-<div class="warning">
-    <h3>⚠ WARNING</h3>
-    <p>
-        Your denied travel count is <b>{{ denied_count }}</b>.<br>
-        This is above the safe limit. Please follow system rules or contact admin.
-    </p>
-</div>
-{% endif %}
-
-
-<div class="table-card">
-    <h3>Travel History</h3>
-
-    <table>
-        <tr>
-            <th>Log ID</th>
-            <th>Booking ID</th>
-            <th>Schedule</th>
-            <th>Seat</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Status</th>
-            <th>Time</th>
-        </tr>
-
-        {% for l in logs %}
-        <tr>
-            <td>{{ l[0] }}</td>
-            <td>{{ l[1] }}</td>
-            <td>{{ l[3] }}</td>
-            <td>{{ l[4] }}</td>
-            <td>{{ l[5] }}</td>
-            <td>{{ l[6] }}</td>
-            <td>{{ l[7] }}</td>
-            <td>{{ l[8] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-
-
-<div class="table-card">
-    <h3>Payment History</h3>
-
-    <form method="GET" action="/student_dashboard">
-        <input type="hidden" name="student_id" value="{{ student_id }}">
-
-        <label>Semester ID:</label>
-        <input type="number" name="semester_id" value="{{ semester_id }}" min="1">
-
-        <button type="submit">Search Payment</button>
-    </form>
-
-    <table>
-        <tr>
-            <th>Payment ID</th>
-            <th>Student ID</th>
-            <th>Semester ID</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
-        </tr>
-
-        {% for p in payments %}
-        <tr>
-            <td>{{ p[0] }}</td>
-            <td>{{ p[1] }}</td>
-            <td>{{ p[2] }}</td>
-            <td>{{ p[3] }}</td>
-            <td>{{ p[4] }}</td>
-            <td>{{ p[5] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+<script>
+    
+    (function() {
+        const deniedCount = parseInt("{{ denied_count }}");
+        if (deniedCount > 5) {
+            showFloatingWarning(`⚠️  Your denied travel count is ${deniedCount}. Please contruct with Tilok Paul to avoid issues. `, 5000);
+        }
+        
+      
+        function showFloatingWarning(message, duration = 4000) {
+            const toast = document.createElement('div');
+            toast.style.position = 'fixed';
+            toast.style.bottom = '25px';
+            toast.style.right = '25px';
+            toast.style.background = '#b91c1c';
+            toast.style.color = 'white';
+            toast.style.padding = '12px 24px';
+            toast.style.borderRadius = '50px';
+            toast.style.fontWeight = '500';
+            toast.style.zIndex = '1000';
+            toast.style.boxShadow = '0 8px 20px rgba(0,0,0,0.2)';
+            toast.style.fontSize = '0.9rem';
+            toast.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), duration);
+        }
+        
+        
+        const deniedRows = document.querySelectorAll('.status-denied');
+        deniedRows.forEach(row => {
+            const parentTr = row.closest('tr');
+            if (parentTr) {
+                parentTr.style.background = '#fff5f0';
+            }
+        });
+        
+        const semesterInput = document.querySelector('input[name="semester_id"]');
+        if (semesterInput && !semesterInput.value) {
+            semesterInput.placeholder = "Enter Semester ID ";
+        }
+        
+        console.log("Student Dashboard loaded | DIU Smart Transport");
+    })();
+</script>
 
 </body>
 </html>
